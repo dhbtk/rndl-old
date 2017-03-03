@@ -1,0 +1,108 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's 
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_self
+ */
+@import "theme";
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+/* Dates and trips list */
+
+.date-item-header > h5 > button {
+  width: 43px;
+  margin-right: 12px;
+}
+
+.dates-header, .dates {
+  margin-top: 16px;
+}
+
+.dates-header > .links {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Trip detail */
+
+html.full-height {
+  body, #app, [data-reactroot] {
+    height: 100vh;
+    overflow: auto;
+  }
+  [data-reactroot] {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
+
+nav[role="navigation"] {
+  min-height: 76px;
+}
+
+.trip-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-container > .row {
+  flex: 1;
+}
+
+.trip-tooltip {
+  position: relative;
+  padding: 3px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  opacity: 0.7;
+  white-space: nowrap;
+  font: 10pt sans-serif;
+}
+
+#trip-map {
+  position: relative;
+  padding-right: 0;
+}
+
+#trip-legend {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: #FFF;
+  z-index: 50;
+  padding: 8px;
+}
+
+#trip-legend > ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#trip-legend > ul > li {
+  display: flex;
+  justify-content: space-between;
+}
+
+#trip-legend .legend-color {
+  width: 32px;
+  height: 24px;
+  border-radius: 2px;
+  margin-right: 6px;
+}
+
+#trip-legend > ul > li:not(:last-child) {
+  margin-bottom: 6px;
+}
