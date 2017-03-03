@@ -47,8 +47,8 @@ export default class Navigation extends React.Component {
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="mr-auto" navbar>
                             <NavItem>
-                                <LinkContainer to={'/dates/' + date}>
-                                    <NavLink>Datas</NavLink>
+                                <LinkContainer to="/trips">
+                                    <NavLink>Viagens</NavLink>
                                 </LinkContainer>
                             </NavItem>
                         </Nav>

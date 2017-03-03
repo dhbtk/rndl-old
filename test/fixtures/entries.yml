@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  trip: one
+  device_time: 2017-03-03 15:12:32
+  latitude: 9.99
+  longitude: 9.99
+  gps_speed: 9.99
+  altitude: 9.99
+  rpm: 9.99
+  kml: 9.99
+  speed: 1
+
+two:
+  trip: two
+  device_time: 2017-03-03 15:12:32
+  latitude: 9.99
+  longitude: 9.99
+  gps_speed: 9.99
+  altitude: 9.99
+  rpm: 9.99
+  kml: 9.99
+  speed: 1

@@ -2,17 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import {Link} from 'react-router';
 import {AppDispatcher} from '../dispatcher';
-import {DateStore} from '../stores/DateStore';
+import {TripStore} from '../stores/TripStore';
 import {Button, Table} from 'reactstrap';
 
-class DateItem extends React.Component {
-    requestTrips() {
-        AppDispatcher.dispatch({
-            actionName: 'list-trips',
-            date: this.props.date
-        });
-    }
-
+class TripList extends React.Component {
     render() {
         return (
             <div className="trip-list">
@@ -42,13 +35,15 @@ class DateItem extends React.Component {
     }
 }
 
-export default class Dates extends React.Component {
+export default class Trips extends React.Component {
     constructor(props) {
         super(props);
 
+        const currentMonth = this.props.params.date ? moment(this.props.params.date, 'YYYY-MM-DD') : moment();
+
 
         this.state = {
-            currentMonth: moment(this.props.params.date, 'YYYY-MM-DD'),
+            currentMonth: currentMonth,
             loading: false,
             dates: [],
             trips: {}
@@ -56,26 +51,19 @@ export default class Dates extends React.Component {
     }
 
     componentDidMount() {
-        DateStore.addListener('dates-loaded', this.setDates.bind(this));
-        DateStore.addListener('trips-loaded', this.setTrips.bind(this));
+        TripStore.addListener('trips-loaded', this.setTrips.bind(this));
         AppDispatcher.dispatch({
-            actionName: 'list-dates',
+            actionName: 'list-trips',
             date: this.state.currentMonth
         });
     }
 
     componentWillUnmount() {
-        DateStore.removeListener('dates-loaded');
-        DateStore.removeListener('trips-loaded');
-    }
-
-    setDates() {
-        const data = DateStore.getDates();
-        this.setState({ dates: data });
+        TripStore.removeListener('trips-loaded');
     }
 
     setTrips() {
-        const data = DateStore.getTrips();
+        const data = DateStore.getAll();
         this.setState({ trips: data });
     }
 
@@ -96,7 +84,6 @@ export default class Dates extends React.Component {
 
     render() {
         const currentMonth = this.state.currentMonth;
-        const currentMonthYMD = currentMonth.format('YYYY-MM-DD');
         const previousMonth = currentMonth.clone();
         previousMonth.subtract(1, 'month');
         const nextMonth = currentMonth.clone();
@@ -122,7 +109,7 @@ export default class Dates extends React.Component {
                         </ul>
                     </div>
                     <div className="col-md-9 trips-table-list">
-                        {this.state.dates.map(date => <DateItem key={date.trip_date} date={date} />)}
+                        {this.state.dates.map(date => <TripList key={date.trip_date} date={date} />)}
                     </div>
                 </div>
             </div>
