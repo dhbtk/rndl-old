@@ -18,6 +18,7 @@ class TripList extends React.Component {
                         <th>Distância (km)</th>
                         <th>Velocidade Média (km/h)</th>
                         <th>Economia (km/l)</th>
+                        <th>Veículo</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -27,6 +28,7 @@ class TripList extends React.Component {
                         <td>{(parseFloat(trip.distance)/1000).toFixed(1)} km</td>
                         <td>{parseFloat(trip.average_speed).toFixed(0)} km/h</td>
                         <td>{parseFloat(trip.economy).toFixed(1)} km/l</td>
+                        <td>{trip.vehicle}</td>
                     </tr>)}
                     </tbody>
                 </Table>

@@ -11,16 +11,16 @@ export default class Trip extends React.Component {
 
         this.state = {
             map_points: [],
-            kml: 0,
+            economy: 0,
             average_speed: 0,
             max_speed: 0,
-            total_distance: 0,
+            distance: 0,
             id: null
         };
     }
 
     setTrip() {
-        this.setState(TripStore.getTripData());
+        this.setState(TripStore.getOne());
     }
 
     colorForSpeedHsl(speed) {
@@ -181,8 +181,8 @@ export default class Trip extends React.Component {
                 <div className="row">
                     <div className="col-md-3">
                         <h5>Viagem de {moment(this.state.start_time).format('DD [de] MMMM, HH:mm')}</h5>
-                        <p>Distância: {(parseFloat(this.state.total_distance) / 1000).toFixed(2)} km</p>
-                        <p>Média de consumo: {parseFloat(this.state.kml).toFixed(1)} km/l</p>
+                        <p>Distância: {(parseFloat(this.state.distance) / 1000).toFixed(2)} km</p>
+                        <p>Média de consumo: {parseFloat(this.state.economy).toFixed(1)} km/l</p>
                         <p>Velocidade média: {parseFloat(this.state.average_speed).toFixed(0)} km/h</p>
                         <p>Velocidade máxima: {parseFloat(this.state.max_speed).toFixed(0)} km/h</p>
                     </div>
