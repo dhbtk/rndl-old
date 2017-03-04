@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170303181232) do
+ActiveRecord::Schema.define(version: 20170303232905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "entries", force: :cascade do |t|
     t.bigint "trip_id", null: false
@@ -30,6 +31,13 @@ ActiveRecord::Schema.define(version: 20170303181232) do
     t.index ["trip_id"], name: "index_entries_on_trip_id"
   end
 
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
+  end
+
   create_table "trips", force: :cascade do |t|
     t.datetime "start_time"
     t.float "distance"
@@ -39,6 +47,7 @@ ActiveRecord::Schema.define(version: 20170303181232) do
     t.bigint "vehicle_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.time "duration"
     t.index ["vehicle_id"], name: "index_trips_on_vehicle_id"
   end
 
