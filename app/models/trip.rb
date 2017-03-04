@@ -1,5 +1,5 @@
 class Trip < ApplicationRecord
-  TIME_OFFSET = -3.hours
+  TIME_OFFSET = 0
 
   belongs_to :vehicle
   has_many :entries, dependent: :restrict_with_error
