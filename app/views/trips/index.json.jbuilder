@@ -4,6 +4,7 @@ json.array! @dates do |date|
   json.trips do
     json.array!(Trip.where('date(start_time) = ?', date[0]).order(:start_time)) do |trip|
       json.extract! trip, :id, :start_time, :distance, :average_speed, :max_speed, :economy, :duration
+      json.vehicle trip.vehicle.name
     end
   end
 end
