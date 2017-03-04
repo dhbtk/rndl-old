@@ -23,10 +23,10 @@ class TripList extends React.Component {
                     <tbody>
                     {this.props.date.trips.map(trip => <tr key={trip.id}>
                         <td><Link to={'/trips/' + trip.id}>{new Date(trip.start_time).toLocaleTimeString()}</Link></td>
-                        <td>-</td>
-                        <td>{(parseFloat(trip.total_distance)/1000).toFixed(1)} km</td>
+                        <td>{moment(trip.duration).format('hh:mm')}</td>
+                        <td>{(parseFloat(trip.distance)/1000).toFixed(1)} km</td>
                         <td>{parseFloat(trip.average_speed).toFixed(0)} km/h</td>
-                        <td>{parseFloat(trip.kml).toFixed(1)} km/l</td>
+                        <td>{parseFloat(trip.economy).toFixed(1)} km/l</td>
                     </tr>)}
                     </tbody>
                 </Table>
@@ -39,14 +39,14 @@ export default class Trips extends React.Component {
     constructor(props) {
         super(props);
 
-        const currentMonth = this.props.params.date ? moment(this.props.params.date, 'YYYY-MM-DD') : moment();
+        const currentMonth = this.props.location.query.date ? moment(this.props.location.query.date, 'YYYY-MM-DD') : moment();
 
 
         this.state = {
             currentMonth: currentMonth,
             loading: false,
             dates: [],
-            trips: {}
+            trips: []
         }
     }
 
@@ -63,16 +63,16 @@ export default class Trips extends React.Component {
     }
 
     setTrips() {
-        const data = DateStore.getAll();
+        const data = TripStore.getAll();
         this.setState({ trips: data });
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.params.date != this.props.params.date) {
-            const newCurrentMonth = moment(nextProps.params.date, 'YYYY-MM-DD');
-            this.setState({ currentMonth: newCurrentMonth, dates: [], trips: {} });
+        if (nextProps.location.query.date != this.props.location.query.date) {
+            const newCurrentMonth = moment(nextProps.location.query.date, 'YYYY-MM-DD');
+            this.setState({ currentMonth: newCurrentMonth, trips: [] });
             AppDispatcher.dispatch({
-                actionName: 'list-dates',
+                actionName: 'list-trips',
                 date: newCurrentMonth
             });
         }
@@ -93,15 +93,15 @@ export default class Trips extends React.Component {
                 <div className="dates-header">
                     <h3>{currentMonth.format('MMMM [de] YYYY')}</h3>
                     <div className="links">
-                        <Link to={'/dates/' + previousMonth.format('YYYY-MM-DD')}>« {previousMonth.format('MMMM [de] YYYY')}</Link>
-                        <Link to={'/dates/' + nextMonth.format('YYYY-MM-DD')}>{nextMonth.format('MMMM [de] YYYY')} »</Link>
+                        <Link to={'/trips?date=' + previousMonth.format('YYYY-MM-DD')}>« {previousMonth.format('MMMM [de] YYYY')}</Link>
+                        <Link to={'/trips?date=' + nextMonth.format('YYYY-MM-DD')}>{nextMonth.format('MMMM [de] YYYY')} »</Link>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-3 month-dates-list">
                         <h5>Datas</h5>
                         <ul>
-                            {this.state.dates.map(date => <li key={date.trip_date}>
+                            {this.state.trips.map(date => <li key={date.trip_date}>
                                 <a href="#" onClick={this.scrollToDate.bind(this, date)}>
                                     {moment(date.trip_date, 'YYYY-MM-DD').format('DD [de] MMMM')} ({date.count})
                                 </a>
@@ -109,7 +109,7 @@ export default class Trips extends React.Component {
                         </ul>
                     </div>
                     <div className="col-md-9 trips-table-list">
-                        {this.state.dates.map(date => <TripList key={date.trip_date} date={date} />)}
+                        {this.state.trips.map(date => <TripList key={date.trip_date} date={date} />)}
                     </div>
                 </div>
             </div>
