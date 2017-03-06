@@ -59,6 +59,9 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
+    annotate (2.6.5)
+      activerecord (>= 2.3.0)
+      rake (>= 0.8.7)
     arel (8.0.0)
     builder (3.2.3)
     byebug (9.0.6)
@@ -172,6 +175,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  annotate
   byebug
   capybara (~> 2.7.0)
   jbuilder (~> 2.5)
