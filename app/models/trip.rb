@@ -6,8 +6,8 @@ class Trip < ApplicationRecord
 
   def self.find_by_vehicle_within(vehicle, time_ms)
     session_time = DateTime.strptime(time_ms, '%Q') + TIME_OFFSET
-    minus = session_time - 1.minute
-    plus = session_time + 1.minute
+    minus = session_time - 3.minute
+    plus = session_time + 3.minute
     trip = where(vehicle_id: vehicle.id).where('start_time >= ? AND start_time <= ?', minus, plus).take
 
     trip || create(vehicle_id: vehicle.id, start_time: session_time)
