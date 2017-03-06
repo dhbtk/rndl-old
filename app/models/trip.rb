@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: trips
+#
+#  average_speed :integer
+#  created_at    :datetime         not null
+#  distance      :float
+#  duration      :time
+#  economy       :float
+#  id            :integer          not null, primary key
+#  max_speed     :integer
+#  start_time    :datetime
+#  updated_at    :datetime         not null
+#  vehicle_id    :integer
+#
+# Indexes
+#
+#  index_trips_on_vehicle_id  (vehicle_id)
+#
+
 class Trip < ApplicationRecord
   TIME_OFFSET = 0
 
