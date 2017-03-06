@@ -43,6 +43,12 @@ export default class Trip extends React.Component {
         const points = new ol.Collection();
         const segments = new ol.Collection();
 
+        const segmentsLayer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: segments
+            })
+        });
+
         // creating map
         const map = new ol.Map({
             controls: [],
@@ -51,11 +57,7 @@ export default class Trip extends React.Component {
                 new ol.layer.Tile({
                     source: new ol.source.OSM()
                 }),
-                new ol.layer.Vector({
-                    source: new ol.source.Vector({
-                        features: segments
-                    })
-                }),
+                segmentsLayer,
                 new ol.layer.Vector({
                     source: new ol.source.Vector({
                         features: points
@@ -155,6 +157,7 @@ export default class Trip extends React.Component {
                 document.getElementById('trip-tooltip').innerHTML = feature.get('speed').toFixed(0) + ' km/h';
             }
         });
+        map.getView().fit(segmentsLayer.getSource().getExtent(), map.getSize());
     }
 
     componentDidMount() {
