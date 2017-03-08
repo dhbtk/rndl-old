@@ -1,23 +1,50 @@
-import React from 'react';
-import {Router, Route, browserHistory, IndexRoute} from 'react-router'
-import Navigation from './Navigation.jsx';
-import Home from './Home.jsx';
-import Trips from './Trips.jsx';
-import Trip from './Trip.jsx';
-import Vehicles from './Vehicles.jsx';
-import Vehicle from './Vehicle.jsx';
+import React from "react";
+import {LinkContainer} from "react-router-bootstrap";
+import {Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink} from "reactstrap";
+import moment from "moment";
 
 export default class App extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            isOpen: false
+        };
+    }
+
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    }
+
     render() {
+        const date = moment().format("YYYY-MM-DD");
         return (
-            <Router history={browserHistory}>
-                <Route path="/" component={Navigation}>
-                    <IndexRoute component={Home}/>
-                    <Route path="/vehicles" component={Vehicles}/>
-                    <Route path="/vehicles/:id" component={Vehicle}/>
-                    <Route path="/trips" component={Trips}/>
-                    <Route path="/trips/:id" component={Trip}/>
-                </Route>
-            </Router>);
+            <div>
+                <Navbar color="primary" toggleable inverse={true}>
+                    <NavbarToggler right onClick={this.toggle} />
+                    <NavbarBrand href="/">
+                        Torque Logs
+                    </NavbarBrand>
+                    <Collapse isOpen={this.state.isOpen} navbar>
+                        <Nav className="mr-auto" navbar>
+                            <NavItem>
+                                <LinkContainer to="/vehicles">
+                                    <NavLink>Veículos</NavLink>
+                                </LinkContainer>
+                            </NavItem>
+                            <NavItem>
+                                <LinkContainer to="/trips">
+                                    <NavLink>Viagens</NavLink>
+                                </LinkContainer>
+                            </NavItem>
+                        </Nav>
+                    </Collapse>
+                </Navbar>
+                {this.props.children}
+            </div>
+        );
     }
 }
