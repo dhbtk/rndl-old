@@ -69,12 +69,9 @@ class TripsPage extends React.Component {
             delta.vehicleId = nextProps.location.query.vehicleId;
         }
         if (delta.currentMonth !== undefined || delta.vehicleId !== undefined) {
-            delta.loading = true;
             this.setState(delta);
             const newState = Object.assign({}, this.state, delta);
             this.props.actions.loadTrips(newState.currentMonth.format('YYYY-MM-DD'), newState.vehicleId);
-        } else {
-            this.setState({ loading: false })
         }
     }
 
@@ -113,7 +110,7 @@ class TripsPage extends React.Component {
                 <div className="row">
                     <div className="col-md-3 month-dates-list">
                         <h5>Datas</h5>
-                        {this.state.loading ||
+                        {this.props.loading ||
                         <ul>
                             {this.props.trips.map(date => <li key={date.trip_date}>
                                 <a href="#" onClick={this.scrollToDate.bind(this, date)}>
@@ -123,7 +120,7 @@ class TripsPage extends React.Component {
                         </ul>}
                     </div>
                     <div className="col-md-9 trips-table-list">
-                        {this.state.loading ? <span className="loading">Carregando...</span> : this.props.trips.map(
+                        {this.props.loading ? <span className="loading">Carregando...</span> : this.props.trips.map(
                                 date => <TripList key={date.trip_date} date={date}/>)}
                     </div>
                 </div>
@@ -139,7 +136,8 @@ TripsPage.propTypes = {
 function mapStateToProps(state, ownProps) {
     return {
         trips: state.trips,
-        vehicles: state.vehicles
+        vehicles: state.vehicles,
+        loading: state.loading
     }
 }
 
