@@ -1,28 +1,12 @@
-import React from 'react';
-import {AppDispatcher} from '../dispatcher';
-import {TripStore} from '../stores/TripStore';
-import moment from 'moment';
-import ol from 'openlayers';
-import Color from 'color';
+import React, {PropTypes} from "react";
+import moment from "moment";
+import ol from "openlayers";
+import Color from "color";
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as tripActions from '../../actions/tripActions';
 
-export default class Trip extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            map_points: [],
-            economy: 0,
-            average_speed: 0,
-            max_speed: 0,
-            distance: 0,
-            id: null
-        };
-    }
-
-    setTrip() {
-        this.setState(TripStore.getOne());
-    }
-
+class TripPage extends React.Component {
     colorForSpeedHsl(speed) {
         const max = 120;
         const actualSpeed = speed > max ? max : speed;
@@ -72,9 +56,9 @@ export default class Trip extends React.Component {
         });
 
         let totalLength = 0;
-        for(let i = 0; i < this.state.map_points.length - 1; i++) {
-            const p1 = this.state.map_points[i];
-            const p2 = this.state.map_points[i + 1];
+        for(let i = 0; i < this.props.trip.map_points.length - 1; i++) {
+            const p1 = this.props.trip.map_points[i];
+            const p2 = this.props.trip.map_points[i + 1];
             const speedAvg = (parseFloat(p1.speed) + parseFloat(p2.speed))/2;
             const color = this.colorForSpeed(speedAvg);
             const lineStringCoords = [[parseFloat(p1.longitude), parseFloat(p1.latitude)], [parseFloat(p2.longitude), parseFloat(p2.latitude)]]
@@ -160,34 +144,26 @@ export default class Trip extends React.Component {
         map.getView().fit(segmentsLayer.getSource().getExtent(), map.getSize());
     }
 
-    componentDidMount() {
-        TripStore.addListener('trip-loaded', this.setTrip.bind(this));
-        AppDispatcher.dispatch({
-            actionName: 'load-trip',
-            id: this.props.params.id
-        });
-    }
-
     componentWillMount() {
+        this.props.actions.loadTrip(this.props.params.id);
         document.querySelector('html').classList.add('full-height');
     }
 
     componentWillUnmount() {
         document.querySelector('html').classList.remove('full-height');
-        TripStore.removeListener('trip-loaded');
     }
 
     render() {
         console.log('render');
-        return this.state.id === null ? <div>Carregando...</div> : (
+        return !this.props.trip.id ? <div>Carregando...</div> : (
             <div className="container-fluid trip-container">
                 <div className="row">
                     <div className="col-md-3">
-                        <h5>Viagem de {moment(this.state.start_time).format('DD [de] MMMM, HH:mm')}</h5>
-                        <p>Distância: {(parseFloat(this.state.distance) / 1000).toFixed(2)} km</p>
-                        <p>Média de consumo: {parseFloat(this.state.economy).toFixed(1)} km/l</p>
-                        <p>Velocidade média: {parseFloat(this.state.average_speed).toFixed(0)} km/h</p>
-                        <p>Velocidade máxima: {parseFloat(this.state.max_speed).toFixed(0)} km/h</p>
+                        <h5>Viagem de {moment(this.props.trip.start_time).format('DD [de] MMMM, HH:mm')}</h5>
+                        <p>Distância: {(parseFloat(this.props.trip.distance) / 1000).toFixed(2)} km</p>
+                        <p>Média de consumo: {parseFloat(this.props.trip.economy).toFixed(1)} km/l</p>
+                        <p>Velocidade média: {parseFloat(this.props.trip.average_speed).toFixed(0)} km/h</p>
+                        <p>Velocidade máxima: {parseFloat(this.props.trip.max_speed).toFixed(0)} km/h</p>
                     </div>
                     <div className="col-md-9" id="trip-map">
                         <div id="trip-tooltip" className="trip-tooltip"/>
@@ -205,3 +181,22 @@ export default class Trip extends React.Component {
         );
     }
 }
+
+TripPage.propTypes = {
+    trip: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+    return {
+        trip: state.trip
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(tripActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TripPage);
