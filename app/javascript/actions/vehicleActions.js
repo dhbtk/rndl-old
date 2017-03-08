@@ -1,9 +1,15 @@
 import vehicleApi from '../api/VehicleApi';
+import {startLoading, stopLoading} from './loadingActions';
 import * as types from './types';
 
 export function loadVehicles() {
     return function(dispatch) {
-        return vehicleApi.getAllVehicles().then(vehicles => dispatch(loadVehiclesSuccess(vehicles))).catch(error => {
+        dispatch(startLoading());
+        return vehicleApi.getAllVehicles().then(vehicles => {
+            dispatch(stopLoading());
+            dispatch(loadVehiclesSuccess(vehicles))
+        }).catch(error => {
+            dispatch(stopLoading());
             throw(error)
         });
     }
@@ -15,7 +21,12 @@ export function loadVehiclesSuccess(vehicles) {
 
 export function loadVehicle(id) {
     return function(dispatch) {
-        return vehicleApi.getVehicle(id).then(vehicle => dispatch(loadVehicleSuccess(vehicle))).catch(error => {
+        dispatch(startLoading());
+        return vehicleApi.getVehicle(id).then(vehicle => {
+            dispatch(stopLoading());
+            dispatch(loadVehicleSuccess(vehicle))
+        }).catch(error => {
+            dispatch(stopLoading());
             throw(error);
         });
     }
