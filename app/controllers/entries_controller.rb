@@ -7,7 +7,7 @@ class EntriesController < ApplicationController
         vehicle = Vehicle.create_with(name: 'Veículo Desconhecido').find_or_create_by(torque_id: params[:id])
         trip = Trip.find_by_vehicle_within(vehicle, params[:session])
 
-        Entry.create({
+        e = Entry.create({
                          trip: trip,
                          device_time: DateTime.strptime(params[:time], '%Q') + Trip::TIME_OFFSET,
                          longitude: params['kff1005'],
@@ -17,6 +17,7 @@ class EntriesController < ApplicationController
                          kml: params['kff1206'],
                          speed: params['kd']
                      })
+        ActionCable.server.broadcast('test', id: vehicle.id, entry: e)
         render html: 'OK!'
       end
     end

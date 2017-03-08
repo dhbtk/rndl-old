@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import * as vehicleActions from '../../actions/vehicleActions';
 import {Card, CardBlock, CardTitle, CardText} from 'reactstrap';
 import {Link} from 'react-router';
+import moment from 'moment';
 
 function Vehicle({vehicle}) {
     return (
@@ -13,7 +14,7 @@ function Vehicle({vehicle}) {
                     <CardTitle>{vehicle.name}</CardTitle>
                     <CardText>
                         <p>
-                            ID: {vehicle.torque_id}
+                            Última atualização: {moment.duration(new Date() - new Date(vehicle.latest_gps_entry.device_time)).humanize()} atrás
                         </p>
                     </CardText>
                     <Link className="btn btn-secondary" to={'/vehicles/' + vehicle.id}>Detalhes</Link>
