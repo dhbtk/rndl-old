@@ -16,7 +16,7 @@ export function login(email, password) {
                 localStorage.setItem("uid", uid);
                 localStorage.setItem("token", token);
                 localStorage.setItem("client", client);
-                const tokenData = { uid, 'access-token': token, client, validated: true };
+                const tokenData = { uid, token, client, validated: true };
                 dispatch(tokenRefreshSuccess(tokenData));
                 result.json().then(response => {
                     dispatch(loadUserSuccess(response.data));
@@ -29,6 +29,7 @@ export function login(email, password) {
 }
 
 export function tokenRefreshSuccess(token) {
+    console.log('setando token');
     return { type: types.TOKEN_REFRESH_SUCCESS, token };
 }
 
