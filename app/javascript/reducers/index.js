@@ -1,6 +1,7 @@
 import {vehicles, vehicle} from "./vehicleReducer";
 import {trips, trip} from "./tripReducer";
 import {loading} from "./loadingReducer";
+import {user, token} from "./authReducer";
 import {combineReducers} from "redux";
 
 const rootReducer = combineReducers({
@@ -10,7 +11,10 @@ const rootReducer = combineReducers({
     vehicle,
 
     trips,
-    trip
+    trip,
+
+    token,
+    user
 });
 
 export default rootReducer;
