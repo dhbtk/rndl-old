@@ -6,6 +6,7 @@ export function loadTrips(date, vehicleId) {
     return function(dispatch) {
         dispatch(startLoading());
         return tripApi.getAllTrips(date, vehicleId).then(trips => {
+            console.log(trips);
             dispatch(stopLoading());
             dispatch(loadTripsSuccess(trips))
         }).catch(error => {

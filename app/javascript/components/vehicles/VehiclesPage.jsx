@@ -24,7 +24,7 @@ function Vehicle({vehicle}) {
 }
 
 class VehiclesPage extends React.Component {
-    componentWillMount() {
+    componentDidMount() {
         this.props.actions.loadVehicles();
     }
 

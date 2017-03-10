@@ -1,6 +1,8 @@
+import {authFetch} from '../auth';
+
 export default class TripApi {
     static getAllTrips(date, vehicleId) {
-        return fetch(`/api/trips?date=${date}&vehicle_id=${vehicleId}`).then(response => {
+        return authFetch(`/api/trips?date=${date}&vehicle_id=${vehicleId}`).then(response => {
             return response.json();
         }).catch(error => {
             return error;
@@ -8,7 +10,7 @@ export default class TripApi {
     }
 
     static getTrip(id) {
-        return fetch(`/api/trips/${id}`).then(response => {
+        return authFetch(`/api/trips/${id}`).then(response => {
             return response.json();
         }).catch(error => {
             return error;

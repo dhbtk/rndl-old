@@ -1,6 +1,8 @@
+import {authFetch} from '../auth';
+
 export default class VehicleApi {
     static getAllVehicles() {
-        return fetch(`/api/vehicles`).then(response => {
+        return authFetch(`/api/vehicles`).then(response => {
             return response.json();
         }).catch(error => {
             return error;
@@ -8,7 +10,7 @@ export default class VehicleApi {
     }
 
     static getVehicle(id) {
-        return fetch(`/api/vehicles/${id}`).then(response => {
+        return authFetch(`/api/vehicles/${id}`).then(response => {
             return response.json();
         }).catch(error => {
             return error;

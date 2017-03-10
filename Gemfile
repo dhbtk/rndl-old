@@ -53,3 +53,8 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'annotate'
+
+gem 'devise_token_auth'
+
+# webpacker being silly
+gem 'erubis'
