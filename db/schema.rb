@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170310142837) do
+ActiveRecord::Schema.define(version: 20170310223946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,10 @@ ActiveRecord::Schema.define(version: 20170310142837) do
     t.integer "speed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "throttle_percent", precision: 5, scale: 2, default: "0.0"
+    t.decimal "instant_kml", precision: 3, scale: 1
+    t.decimal "fuel_flow", precision: 7, scale: 1
+    t.decimal "fuel_used", precision: 5, scale: 1
     t.index ["trip_id"], name: "index_entries_on_trip_id"
   end
 
@@ -48,7 +52,31 @@ ActiveRecord::Schema.define(version: 20170310142837) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.time "duration"
+    t.decimal "fuel_used", precision: 5, scale: 1
     t.index ["vehicle_id"], name: "index_trips_on_vehicle_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.integer "role", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "provider", default: "email", null: false
+    t.string "uid", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "name", null: false
+    t.json "tokens"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
   create_table "vehicles", force: :cascade do |t|
