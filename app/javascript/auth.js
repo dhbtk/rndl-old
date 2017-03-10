@@ -1,5 +1,5 @@
 import {store} from 'store';
-import {tokenRefreshSuccess, loadUserSuccess} from 'actions/authActions.js';
+import {tokenRefreshSuccess, loadUserSuccess, loadUserFailed} from 'actions/authActions.js';
 import 'whatwg-fetch'
 
 export function requireAuth(nextState, replace) {
@@ -21,22 +21,26 @@ function updateTokenFromHeaders(headers) {
     localStorage.setItem("uid", uid);
     localStorage.setItem("token", token);
     localStorage.setItem("client", client);
-    const tokenData = { uid, 'access-token': token, client, validated: true };
-    store.dispatch(tokenRefreshSuccess(tokenData));
+    const tokenData = { uid, token, client, validated: true };
+    if(tokenData.token === null) {
+        console.log('Mesmo token');
+    } else {
+        store.dispatch(tokenRefreshSuccess(tokenData));
+    }
 }
 
 export function authFetch(url, origOpts = {}) {
     return new Promise((resolve, reject) => {
         const { token } = store.getState();
         if (token.validated) {
-            console.log('token validado');
             const opts = Object.assign(origOpts, { headers: addAuthorizationHeader(origOpts.headers, token) });
-            console.log(url, opts);
             window.fetch(url, opts).then(result => {
-                console.log(result);
                 updateTokenFromHeaders(result.headers);
                 resolve(result);
-            }).catch(error => reject(error));
+            }).catch(error => {
+                console.error(error);
+                reject(error);
+            });
         } else if (token.token !== null) {
             window.fetch('/auth/validate_token', { headers: addAuthorizationHeader(opts.headers, token) }).then(result => {
                 updateTokenFromHeaders(result.headers);
@@ -48,9 +52,25 @@ export function authFetch(url, origOpts = {}) {
                         resolve(result);
                     }).catch(error => reject(error));
                 }
-            })
+            });
         } else {
             reject("not logged in");
         }
+    });
+}
+
+export function validateToken() {
+    const { token } = store.getState();
+    window.fetch('/auth/validate_token', { headers: addAuthorizationHeader({}, token) }).then(result => {
+        updateTokenFromHeaders(result.headers);
+        if (result.ok) {
+            result.json().then(result => store.dispatch(loadUserSuccess(result.data)));
+        } else {
+            console.log(result);
+            store.dispatch(loadUserFailed());
+        }
+    }).catch(error => {
+        console.log(error);
+        store.dispatch(loadUserFailed());
     });
 }

@@ -21,7 +21,9 @@ class App extends React.Component {
     }
 
     render() {
-        const date = moment().format("YYYY-MM-DD");
+        if(!this.props.token.validated) {
+            return this.props.children;
+        }
         return (
             <div>
                 <Navbar color="primary" toggleable inverse={true}>
@@ -55,7 +57,8 @@ class App extends React.Component {
 
 function mapStateToProps(state, ownProps) {
     return {
-        loading: state.loading
+        loading: state.loading,
+        token: state.token
     };
 }
 
