@@ -7,6 +7,7 @@
 #  distance      :float
 #  duration      :time
 #  economy       :float
+#  fuel_used     :decimal(5, 1)
 #  id            :integer          not null, primary key
 #  max_speed     :integer
 #  start_time    :datetime

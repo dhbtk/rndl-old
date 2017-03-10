@@ -15,7 +15,11 @@ class EntriesController < ApplicationController
                          gps_speed: params['kff1001'],
                          rpm: params['kc'],
                          kml: params['kff1206'],
-                         speed: params['kd']
+                         speed: params['kd'],
+                         throttle_percent: params['k11'],
+                         instant_kml: params['kff1203'],
+                         fuel_flow: params['kff125a'],
+                         fuel_used: params['kff1271']
                      })
         ActionCable.server.broadcast('test', id: vehicle.id, entry: e)
         render html: 'OK!'
