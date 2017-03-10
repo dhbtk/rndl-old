@@ -26,8 +26,8 @@ class TripList extends React.Component {
                     <tbody>
                     {this.props.date.trips.map(trip => <tr key={trip.id}>
                         <td><Link to={'/trips/' + trip.id}><strong>{moment(new Date(trip.start_time)).format('HH:mm')}</strong></Link></td>
-                        <td>{moment(trip.duration).utc().hours() > 0 ? moment(trip.duration).utc()
-                                .format('hh [horas,] mm [minutos e] ss [segundos]') : moment(trip.duration).utc()
+                        <td>{moment(trip.duration).hours() > 0 ? moment(trip.duration)
+                                .format('hh [horas,] mm [minutos e] ss [segundos]') : moment(trip.duration)
                                 .format('mm [minutos e] ss [segundos]')}</td>
                         <td>{(parseFloat(trip.distance) / 1000).toFixed(1)} km</td>
                         <td>{parseFloat(trip.average_speed).toFixed(0)} km/h</td>
