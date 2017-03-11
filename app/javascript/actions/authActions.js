@@ -1,4 +1,5 @@
 import * as types from './types';
+import {authFetch} from '../auth';
 import 'whatwg-fetch'
 
 export function login(email, password) {
@@ -11,7 +12,7 @@ export function login(email, password) {
             },
             body: JSON.stringify({ email, password })
         }).then(result => {
-            if(result.ok) {
+            if (result.ok) {
                 const [uid, token, client] = [result.headers.get('uid'), result.headers.get('access-token'), result.headers.get('client')];
                 localStorage.setItem("uid", uid);
                 localStorage.setItem("token", token);
@@ -29,10 +30,16 @@ export function login(email, password) {
 }
 
 export function logout() {
-    localStorage.removeItem("uid");
-    localStorage.removeItem("token");
-    localStorage.removeItem("client");
-    return { type: types.TOKEN_DELETE_SUCCESS };
+    return function(dispatch) {
+        authFetch('/auth/sign_out', { method: 'DELETE' }).then(result => {
+            if (result.ok) {
+                localStorage.removeItem("uid");
+                localStorage.removeItem("token");
+                localStorage.removeItem("client");
+                dispatch({ type: types.TOKEN_DELETE_SUCCESS });
+            }
+        })
+    };
 }
 
 export function tokenRefreshSuccess(token) {
