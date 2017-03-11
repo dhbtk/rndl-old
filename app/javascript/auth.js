@@ -67,12 +67,12 @@ export function validateToken() {
             result.json().then(result => store.dispatch(loadUserSuccess(result.data)));
         } else {
             console.log(result);
-            dispatch(tokenDeleteSuccess());
+            store.dispatch(tokenDeleteSuccess());
             store.dispatch(loadUserFailed());
         }
     }).catch(error => {
         console.log(error);
-        dispatch(tokenDeleteSuccess());
+        store.dispatch(tokenDeleteSuccess());
         store.dispatch(loadUserFailed());
     });
 }
