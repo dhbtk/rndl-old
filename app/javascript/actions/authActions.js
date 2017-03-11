@@ -23,6 +23,7 @@ export function login(email, password) {
                     dispatch(loadUserSuccess(response.data));
                 }).catch(error => dispatch(loadUserFailed()));
             } else {
+                dispatch(tokenDeleteSuccess());
                 dispatch(loadUserFailed());
             }
         }).catch(error => dispatch(loadUserFailed()));
@@ -36,10 +37,14 @@ export function logout() {
                 localStorage.removeItem("uid");
                 localStorage.removeItem("token");
                 localStorage.removeItem("client");
-                dispatch({ type: types.TOKEN_DELETE_SUCCESS });
+                dispatch(tokenDeleteSuccess() );
             }
         })
     };
+}
+
+export function tokenDeleteSuccess() {
+    return { type: types.TOKEN_DELETE_SUCCESS };
 }
 
 export function tokenRefreshSuccess(token) {
