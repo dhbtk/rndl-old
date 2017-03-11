@@ -26,7 +26,10 @@ export function login(email, password) {
                 dispatch(tokenDeleteSuccess());
                 dispatch(loadUserFailed());
             }
-        }).catch(error => dispatch(loadUserFailed()));
+        }).catch(error => {
+            dispatch(tokenDeleteSuccess());
+            dispatch(loadUserFailed());
+        });
     }
 }
 
