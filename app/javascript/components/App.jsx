@@ -1,8 +1,10 @@
 import React from "react";
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as authActions from '../actions/authActions';
 import {LinkContainer} from "react-router-bootstrap";
 import {Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink} from "reactstrap";
-import moment from "moment";
+import {browserHistory} from 'react-router';
 
 class App extends React.Component {
     constructor(props) {
@@ -20,14 +22,25 @@ class App extends React.Component {
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.token.token == null) {
+            browserHistory.push('/login');
+        }
+    }
+
+    logOut(event) {
+        event.preventDefault();
+        this.props.actions.logout();
+    }
+
     render() {
-        if(!this.props.token.validated) {
+        if (!this.props.token.validated) {
             return this.props.children;
         }
         return (
             <div>
                 <Navbar color="primary" toggleable inverse={true}>
-                    <NavbarToggler right onClick={this.toggle} />
+                    <NavbarToggler right onClick={this.toggle}/>
                     <NavbarBrand href="/">
                         Torque Logs
                     </NavbarBrand>
@@ -44,10 +57,17 @@ class App extends React.Component {
                                 </LinkContainer>
                             </NavItem>
                         </Nav>
+                        <span className="navbar-text">{this.props.user.email}</span>
+                        <Nav navbar>
+                            <NavItem>
+                                <NavLink href="#" onClick={this.logOut.bind(this)}>Sair</NavLink>
+                            </NavItem>
+                        </Nav>
                     </Collapse>
                 </Navbar>
                 <div className="progress">
-                    <div className="progress-bar progress-bar-striped progress-bar-animated" style={{transition: '0.125s width ease-in-out', width: this.props.loading ? '100%' : '0%'}}></div>
+                    <div className="progress-bar progress-bar-striped progress-bar-animated"
+                         style={{ transition: '0.125s width ease-in-out', width: this.props.loading ? '100%' : '0%' }}></div>
                 </div>
                 {this.props.children}
             </div>
@@ -58,8 +78,15 @@ class App extends React.Component {
 function mapStateToProps(state, ownProps) {
     return {
         loading: state.loading,
-        token: state.token
+        token: state.token,
+        user: state.user
     };
 }
 
-export default connect(mapStateToProps)(App);
+function actionsToProps(dispatch) {
+    return {
+        actions: bindActionCreators(authActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, actionsToProps)(App);
