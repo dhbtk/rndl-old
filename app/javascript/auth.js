@@ -1,5 +1,5 @@
 import {store} from 'store';
-import {tokenRefreshSuccess, loadUserSuccess, loadUserFailed} from 'actions/authActions.js';
+import {tokenRefreshSuccess, loadUserSuccess, loadUserFailed, tokenDeleteSuccess} from 'actions/authActions.js';
 import 'whatwg-fetch'
 
 export function requireAuth(nextState, replace) {
@@ -67,10 +67,12 @@ export function validateToken() {
             result.json().then(result => store.dispatch(loadUserSuccess(result.data)));
         } else {
             console.log(result);
+            dispatch(tokenDeleteSuccess());
             store.dispatch(loadUserFailed());
         }
     }).catch(error => {
         console.log(error);
+        dispatch(tokenDeleteSuccess());
         store.dispatch(loadUserFailed());
     });
 }
