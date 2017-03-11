@@ -18,6 +18,8 @@ export function token(state = initialState.token, action) {
     switch(action.type) {
         case types.TOKEN_REFRESH_SUCCESS:
             return action.token;
+        case types.TOKEN_DELETE_SUCCESS:
+            return { uid: null, token: null, client: null, validated: false };
         default:
             return state;
     }

@@ -4,7 +4,7 @@ import 'whatwg-fetch'
 export function login(email, password) {
     return function(dispatch) {
         dispatch(resetUser());
-        fetch('/auth/sign_in', {
+        window.fetch('/auth/sign_in', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,6 +26,13 @@ export function login(email, password) {
             }
         }).catch(error => dispatch(loadUserFailed()));
     }
+}
+
+export function logout() {
+    localStorage.removeItem("uid");
+    localStorage.removeItem("token");
+    localStorage.removeItem("client");
+    return { type: types.TOKEN_DELETE_SUCCESS };
 }
 
 export function tokenRefreshSuccess(token) {

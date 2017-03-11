@@ -18,13 +18,13 @@ function addAuthorizationHeader(headers = {}, token) {
 
 function updateTokenFromHeaders(headers) {
     const [uid, token, client] = [headers.get('uid'), headers.get('access-token'), headers.get('client')];
-    localStorage.setItem("uid", uid);
-    localStorage.setItem("token", token);
-    localStorage.setItem("client", client);
     const tokenData = { uid, token, client, validated: true };
     if(tokenData.token === null) {
         console.log('Mesmo token');
     } else {
+        localStorage.setItem("uid", uid);
+        localStorage.setItem("token", token);
+        localStorage.setItem("client", client);
         store.dispatch(tokenRefreshSuccess(tokenData));
     }
 }

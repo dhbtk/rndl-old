@@ -35,7 +35,9 @@ class RealTimeVehicleInformation extends React.Component {
     }
 
     componentWillUnmount() {
-        cable.subscriptions.remove(this.subscription);
+        if(this.subscription) {
+            cable.subscriptions.remove(this.subscription);
+        }
     }
 
     render() {

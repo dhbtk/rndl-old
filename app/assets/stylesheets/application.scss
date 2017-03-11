@@ -15,6 +15,25 @@
 @import "theme";
 @import "../../../node_modules/bootstrap/scss/bootstrap";
 
+// login
+#login-container {
+  min-height: 100vh;
+  background-color: $brand-primary;
+  padding-top: 30px;
+}
+
+#login-container > .inner {
+  max-width: 350px;
+  margin: 0 auto;
+  padding: 15px;
+  border-radius: 3px;
+  background-color: #fff;
+
+  & > button {
+    width: 100%;
+  }
+}
+
 /* Trips and trips list */
 
 .date-item-header > h5 > button {

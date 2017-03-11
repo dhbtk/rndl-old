@@ -23,13 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ReactDOM.render(
         <Provider store={store}>
             <Router history={browserHistory}>
+                <Route path="/login" component={Login}/>
                 <Route path="/" component={App}>
                     <IndexRoute component={Home} onEnter={requireAuth}/>
                     <Route path="/vehicles" component={VehiclesPage} onEnter={requireAuth}/>
                     <Route path="/vehicles/:id" component={VehiclePage} onEnter={requireAuth}/>
                     <Route path="/trips" component={TripsPage} onEnter={requireAuth}/>
                     <Route path="/trips/:id" component={TripPage} onEnter={requireAuth}/>
-                    <Route path="/login" component={Login}/>
                 </Route>
             </Router>
         </Provider>, document.getElementById('app'));
