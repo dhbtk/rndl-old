@@ -44,8 +44,8 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
-  config.action_cable.url = 'ws://torque.edanni.io/cable'
-  config.action_cable.allowed_request_origins = [ 'http://torque.edanni.io', ]
+  config.action_cable.url = 'wss://torque.edanni.io/cable/'
+  config.action_cable.allowed_request_origins = [ 'https://torque.edanni.io', ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
