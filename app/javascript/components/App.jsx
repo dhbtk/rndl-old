@@ -42,7 +42,7 @@ class App extends React.Component {
                 <Navbar color="primary" toggleable inverse={true}>
                     <NavbarToggler right onClick={this.toggle}/>
                     <NavbarBrand href="/">
-                        Torque Logs
+                        RNDL
                     </NavbarBrand>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="mr-auto" navbar>

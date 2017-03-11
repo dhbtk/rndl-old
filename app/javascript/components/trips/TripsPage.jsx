@@ -11,7 +11,7 @@ class TripList extends React.Component {
     render() {
         return (
             <div className="trip-list">
-                <h4 data-date={this.props.date.trip_date}>{moment(this.props.date.trip_date, 'YYYY-MM-DD').format('DD [de] MMMM')}</h4>
+                <h4 id={'date' + this.props.date.trip_date}>{moment(this.props.date.trip_date, 'YYYY-MM-DD').format('DD [de] MMMM')}</h4>
                 <Table size="sm" striped>
                     <thead>
                     <tr>
@@ -75,10 +75,6 @@ class TripsPage extends React.Component {
         }
     }
 
-    scrollToDate(date, event) {
-        event.preventDefault();
-    }
-
     setVehicle(event) {
         console.log(event.target);
         const vehicleId = event.target.value;
@@ -113,8 +109,8 @@ class TripsPage extends React.Component {
                         {this.props.loading ||
                         <ul>
                             {this.props.trips.map(date => <li key={date.trip_date}>
-                                <a href="#" onClick={this.scrollToDate.bind(this, date)}>
-                                    {moment(date.trip_date, 'YYYY-MM-DD').format('DD [de] MMMM')} ({date.count})
+                                <a href={'#date' + date.trip_date}>
+                                    {moment(date.trip_date, 'YYYY-MM-DD').format('DD [de] MMMM, dddd')} ({date.count})
                                 </a>
                             </li>)}
                         </ul>}
