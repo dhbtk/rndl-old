@@ -70,6 +70,7 @@ distance = (
 ),
 duration = (SELECT max(device_time) FROM entries WHERE trip_id = trips.id) - start_time,
 updated_at = now()
+WHERE id = '#{id}'
       EOF
     end
   end
