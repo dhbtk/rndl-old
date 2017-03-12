@@ -1,5 +1,6 @@
 import * as types from './types';
-import {authFetch} from '../auth';
+import {pushNotice, pushError} from './flashActions';
+import {authFetch, updateTokenFromHeaders, addAuthorizationHeader} from '../auth';
 import 'whatwg-fetch'
 
 export function login(email, password) {
@@ -21,10 +22,12 @@ export function login(email, password) {
                 dispatch(tokenRefreshSuccess(tokenData));
                 result.json().then(response => {
                     dispatch(loadUserSuccess(response.data));
+                    dispatch(pushNotice("Login efetuado com sucesso."));
                 }).catch(error => dispatch(loadUserFailed()));
             } else {
                 dispatch(tokenDeleteSuccess());
                 dispatch(loadUserFailed());
+                dispatch(pushError("Email ou senha incorretos. Por favor, corrija e tente novamente."));
             }
         }).catch(error => {
             dispatch(tokenDeleteSuccess());
@@ -33,17 +36,37 @@ export function login(email, password) {
     }
 }
 
+export function validateToken(token) {
+    return function(dispatch) {
+        window.fetch('/auth/validate_token', { headers: addAuthorizationHeader({}, token) }).then(result => {
+            updateTokenFromHeaders(result.headers);
+            if (result.ok) {
+                result.json().then(result => dispatch(loadUserSuccess(result.data)));
+            } else {
+                console.log(result);
+                dispatch(tokenDeleteSuccess());
+                dispatch(loadUserFailed());
+                dispatch(pushError("Por favor, faça login novamente."));
+            }
+        }).catch(error => {
+            console.log(error);
+            dispatch(tokenDeleteSuccess());
+            dispatch(loadUserFailed());
+            dispatch(pushError("Por favor, faça login novamente."));
+        });
+    }
+}
+
 export function logout() {
     return function(dispatch) {
-        authFetch('/auth/sign_out', { method: 'DELETE' }).then(result => {
-            if (result.ok) {
-                localStorage.removeItem("uid");
-                localStorage.removeItem("token");
-                localStorage.removeItem("client");
-                dispatch(tokenDeleteSuccess() );
-            }
-        })
-    };
+        authFetch('/auth/sign_out', { method: 'DELETE' });
+        localStorage.removeItem("uid");
+        localStorage.removeItem("token");
+        localStorage.removeItem("client");
+        dispatch(tokenDeleteSuccess());
+        dispatch(resetUser());
+        dispatch(pushNotice("Logout efetuado com sucesso."));
+    }
 }
 
 export function tokenDeleteSuccess() {

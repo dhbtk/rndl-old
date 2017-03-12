@@ -1,6 +1,11 @@
 export const START_LOADING = 'START_LOADING';
 export const STOP_LOADING = 'STOP_LOADING';
 
+export const PUSH_NOTICE = 'PUSH_NOTICE';
+export const POP_NOTICE = 'POP_NOTICE';
+export const PUSH_ERROR = 'PUSH_ERROR';
+export const POP_ERROR = 'POP_ERROR';
+
 export const TOKEN_REFRESH_SUCCESS = 'TOKEN_REFRESH_SUCCESS';
 export const TOKEN_DELETE_SUCCESS = 'TOKEN_DELETE_SUCCESS';
 export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';

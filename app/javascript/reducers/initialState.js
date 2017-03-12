@@ -13,5 +13,7 @@ export default {
         token: localStorage.getItem("token"),
         validated: false
     },
-    user: {}
+    user: {},
+
+    flash: null
 }
