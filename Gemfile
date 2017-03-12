@@ -58,3 +58,5 @@ gem 'devise_token_auth'
 
 # webpacker being silly
 gem 'erubis'
+
+gem "interactor-rails", "~> 2.0"
