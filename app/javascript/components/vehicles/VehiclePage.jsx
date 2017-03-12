@@ -27,7 +27,7 @@ class RealTimeVehicleInformation extends React.Component {
         this.subscription = cable.subscriptions.create('VehicleChannel', {
             received: data => {
                 console.log(data);
-                if(data.id == this.props.id) {
+                if(data.id == this.props.id && !Number.isNaN(data.entry.speed)) {
                     this.setState({ speed: data.entry.speed, rpm: data.entry.rpm });
                 }
             }
@@ -109,7 +109,7 @@ class VehiclePage extends React.Component {
         });
         this.subscription = cable.subscriptions.create('VehicleChannel', {
             received: data => {
-                if(data.id == this.props.vehicle.id && data.entry.longitude && data.entry.latitude) {
+                if(data.id == this.props.vehicle.id && data.entry.longitude && data.entry.latitude && !Number.isNaN(data.entry.speed)) {
                     this.point.getGeometry().setCoordinates(getCoordinatesFromEntry(data.entry));
                     this.point.setStyle(new ol.style.Style({
                         image: new ol.style.Circle({
