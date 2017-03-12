@@ -5,6 +5,7 @@ import * as authActions from '../actions/authActions';
 import {LinkContainer} from "react-router-bootstrap";
 import {Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink} from "reactstrap";
 import {browserHistory} from 'react-router';
+import FlashAlert from './common/FlashAlert.jsx';
 
 class App extends React.Component {
     constructor(props) {
@@ -69,6 +70,7 @@ class App extends React.Component {
                     <div className="progress-bar progress-bar-striped progress-bar-animated"
                          style={{ transition: '0.125s width ease-in-out', width: this.props.loading ? '100%' : '0%' }}></div>
                 </div>
+                <div className="container"><FlashAlert style={{padding: '10px 0'}} /></div>
                 {this.props.children}
             </div>
         );

@@ -1,10 +1,9 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {browserHistory} from 'react-router';
-import * as authActions from '../actions/authActions';
-import {validateToken} from '../auth';
-import { Alert, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import React from "react";
+import {connect} from "react-redux";
+import {browserHistory} from "react-router";
+import {login, validateToken} from "../actions/authActions";
+import {Button, Form, FormGroup, Label, Input} from "reactstrap";
+import FlashAlert from './common/FlashAlert.jsx';
 
 class Login extends React.Component {
     constructor(props) {
@@ -13,14 +12,14 @@ class Login extends React.Component {
         this.state = {
             email: '',
             password: '',
-            buttonDisabled: false,
-            alertShown: false
+            buttonDisabled: false
         };
     }
+
     componentWillMount() {
-        if(!this.props.token.validated && this.props.token.token && this.props.token.token !== 'null') {
+        if (!this.props.token.validated && this.props.token.token && this.props.token.token !== 'null') {
             console.log('validando', this.props.token.token);
-            validateToken();
+            this.props.dispatch(validateToken(this.props.token));
         }
     }
 
@@ -31,16 +30,15 @@ class Login extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.user === null) {
+        if (nextProps.user === null) {
             this.setState({ buttonDisabled: false });
-            this.setState({ alertShown: true });
         }
     }
 
     logIn(event) {
         event.preventDefault();
         this.setState({ buttonDisabled: true });
-        this.props.actions.login(this.state.email, this.state.password);
+        this.props.dispatch(login(this.state.email, this.state.password));
     }
 
     setFormValue(event) {
@@ -54,22 +52,22 @@ class Login extends React.Component {
     }
 
     render() {
-        if(this.props.token.token != null && !this.props.token.validated) {
-            return <div id="login-container"/>;
+        if (this.props.token.token != null && !this.props.token.validated) {
+            return <span>Autenticando...</span>;
         }
         return (
             <div id="login-container">
                 <div className="inner">
-                    <img style={{display: 'block', maxWidth: '200px', margin: '0 auto 15px'}} src="/logo.png" alt="RNDL - Really Nice Data Logger"/>
-                    {this.state.alertShown && <Alert color="danger">Email ou senha incorretos. Por favor, verifique e tente novamente.</Alert>}
+                    <img style={{ display: 'block', maxWidth: '200px', margin: '0 auto 15px' }} src="/logo.png" alt="RNDL - Really Nice Data Logger"/>
+                    <FlashAlert />
                     <Form onSubmit={this.logIn.bind(this)}>
                         <FormGroup>
                             <Label for="email">Email</Label>
-                            <Input type="email" name="email" id="email" onChange={this.setFormValue.bind(this)} />
+                            <Input type="email" name="email" id="email" onChange={this.setFormValue.bind(this)}/>
                         </FormGroup>
                         <FormGroup>
                             <Label for="password">Senha</Label>
-                            <Input type="password" name="password" id="password" onChange={this.setFormValue.bind(this)} />
+                            <Input type="password" name="password" id="password" onChange={this.setFormValue.bind(this)}/>
                         </FormGroup>
                         <Button type="submit" disabled={this.state.buttonDisabled} color="primary">Logar</Button>
                     </Form>
@@ -79,8 +77,4 @@ class Login extends React.Component {
     }
 }
 
-export default connect(({ token, user }) => {
-    return { token, user }
-}, dispatch => {
-    return { actions: bindActionCreators(authActions, dispatch) };
-})(Login);
+export default connect(({ token, user }) => ({ token, user }), dispatch => ({ dispatch }))(Login);
