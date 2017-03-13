@@ -4,8 +4,8 @@
 #
 #  created_at :datetime         not null
 #  id         :integer          not null, primary key
-#  name       :string
-#  torque_id  :string
+#  name       :string           not null
+#  torque_id  :string           not null
 #  updated_at :datetime         not null
 #
 

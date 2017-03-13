@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170310223946) do
+ActiveRecord::Schema.define(version: 20170313112647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,12 +43,12 @@ ActiveRecord::Schema.define(version: 20170310223946) do
   end
 
   create_table "trips", force: :cascade do |t|
-    t.datetime "start_time"
+    t.datetime "start_time", null: false
     t.float "distance"
     t.integer "average_speed"
     t.integer "max_speed"
     t.float "economy"
-    t.bigint "vehicle_id"
+    t.bigint "vehicle_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.time "duration"
@@ -80,8 +80,8 @@ ActiveRecord::Schema.define(version: 20170310223946) do
   end
 
   create_table "vehicles", force: :cascade do |t|
-    t.string "name"
-    t.string "torque_id"
+    t.string "name", null: false
+    t.string "torque_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
