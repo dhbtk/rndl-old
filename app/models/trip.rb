@@ -56,7 +56,7 @@ class Trip < ApplicationRecord
     transaction do
       connection.execute <<-EOF
 UPDATE trips SET
-economy = (SELECT avg(instant_kml) FROM entries WHERE trip_id = trips.id),
+economy = (SELECT avg(instant_kml) FROM entries WHERE trip_id = trips.id AND rpm > 0),
 average_speed = (SELECT avg(speed) FROM entries WHERE trip_id = trips.id),
 max_speed = (SELECT max(speed) FROM entries WHERE trip_id = trips.id),
 fuel_used = (SELECT max(fuel_used) FROM entries WHERE trip_id = trips.id),
