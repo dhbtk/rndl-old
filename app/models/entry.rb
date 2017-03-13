@@ -15,7 +15,7 @@
 #  longitude        :decimal(10, 8)
 #  rpm              :decimal(7, 2)
 #  speed            :integer
-#  throttle_percent :decimal(5, 2)    default("0")
+#  throttle_percent :decimal(5, 2)    default(0.0)
 #  trip_id          :integer          not null
 #  updated_at       :datetime         not null
 #

@@ -10,9 +10,9 @@
 #  fuel_used     :decimal(5, 1)
 #  id            :integer          not null, primary key
 #  max_speed     :integer
-#  start_time    :datetime
+#  start_time    :datetime         not null
 #  updated_at    :datetime         not null
-#  vehicle_id    :integer
+#  vehicle_id    :integer          not null
 #
 # Indexes
 #
