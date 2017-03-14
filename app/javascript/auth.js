@@ -3,11 +3,25 @@ import {tokenRefreshSuccess, tokenDeleteSuccess, resetUser} from 'actions/authAc
 import {pushError} from 'actions/flashActions.js';
 import 'whatwg-fetch'
 
+export const authSettings = { settings: {
+    apiUrl: '',
+    loginRoute: '/login',
+    signInPath: '/auth/sign_in',
+    validateTokenPath: '/auth/validate_token',
+    signOutPath: '/auth/sign_out',
+    pushNotice(notice) {},
+    pushError(error) {}
+} };
+
+export function setAuthSettings(settings) {
+    authSettings.settings = Object.assign(authSettings.settings, settings);
+}
+
 export function requireAuth(nextState, replace) {
     const { token } = store.getState();
     if (!token.validated) {
         replace({
-            pathname: '/login',
+            pathname: authSettings.settings.loginRoute,
             state: { nextPathname: nextState.location.pathname }
         });
     }

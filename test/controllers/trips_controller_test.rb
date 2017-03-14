@@ -11,12 +11,14 @@
 #  id            :integer          not null, primary key
 #  max_speed     :integer
 #  start_time    :datetime         not null
+#  timestamp_ms  :integer          not null
 #  updated_at    :datetime         not null
 #  vehicle_id    :integer          not null
 #
 # Indexes
 #
-#  index_trips_on_vehicle_id  (vehicle_id)
+#  index_trips_on_vehicle_id                   (vehicle_id)
+#  index_trips_on_vehicle_id_and_timestamp_ms  (vehicle_id,timestamp_ms) UNIQUE
 #
 
 require 'test_helper'
