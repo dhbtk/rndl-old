@@ -11,12 +11,14 @@
 #  id            :integer          not null, primary key
 #  max_speed     :integer
 #  start_time    :datetime         not null
+#  timestamp_ms  :integer          not null
 #  updated_at    :datetime         not null
 #  vehicle_id    :integer          not null
 #
 # Indexes
 #
-#  index_trips_on_vehicle_id  (vehicle_id)
+#  index_trips_on_vehicle_id                   (vehicle_id)
+#  index_trips_on_vehicle_id_and_timestamp_ms  (vehicle_id,timestamp_ms) UNIQUE
 #
 
 class Trip < ApplicationRecord
@@ -30,11 +32,7 @@ class Trip < ApplicationRecord
     Trip.transaction do
       Trip.connection.execute('LOCK trips IN ACCESS EXCLUSIVE MODE')
       session_time = DateTime.strptime(time_ms, '%Q') + TIME_OFFSET
-      minus = session_time - 3.minute
-      plus = session_time + 3.minute
-      trip = where(vehicle_id: vehicle.id).where('start_time >= ? AND start_time <= ?', minus, plus).take
-
-      found_trip = trip || create(vehicle_id: vehicle.id, start_time: session_time)
+      found_trip = create_with(start_time: session_time).find_or_create_by(vehicle_id: vehicle.id, timestamp_ms: time_ms)
     end
     found_trip
   end
@@ -72,6 +70,11 @@ duration = (SELECT max(device_time) FROM entries WHERE trip_id = trips.id) - sta
 updated_at = now()
 WHERE id = '#{id}'
       EOF
+      connection.execute <<-EOF
+UPDATE trips SET
+economy = ((distance)/1000)/fuel_used
+WHERE id = '#{id}'
+EOF
     end
   end
 end

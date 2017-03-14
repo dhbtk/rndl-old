@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170313112647) do
+ActiveRecord::Schema.define(version: 20170314232313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,8 @@ ActiveRecord::Schema.define(version: 20170313112647) do
     t.datetime "updated_at", null: false
     t.time "duration"
     t.decimal "fuel_used", precision: 5, scale: 1
+    t.bigint "timestamp_ms", null: false
+    t.index ["vehicle_id", "timestamp_ms"], name: "index_trips_on_vehicle_id_and_timestamp_ms", unique: true
     t.index ["vehicle_id"], name: "index_trips_on_vehicle_id"
   end
 
