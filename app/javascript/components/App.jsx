@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as authActions from '../actions/authActions';
+import * as authActions from '@edanniehues/devise-token-auth-redux/actions';
 import {LinkContainer} from "react-router-bootstrap";
 import {Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink} from "reactstrap";
 import {browserHistory} from 'react-router';

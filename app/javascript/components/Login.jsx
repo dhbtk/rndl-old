@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {browserHistory} from "react-router";
-import {login, validateToken} from "../actions/authActions";
+import {login, validateToken} from "@edanniehues/devise-token-auth-redux/actions";
 import {Button, Form, FormGroup, Label, Input} from "reactstrap";
 import FlashAlert from './common/FlashAlert.jsx';
 

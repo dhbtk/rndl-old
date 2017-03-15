@@ -9,10 +9,18 @@ import VehiclesPage from "../components/vehicles/VehiclesPage.jsx";
 import VehiclePage from "../components/vehicles/VehiclePage.jsx";
 import Login from "../components/Login.jsx";
 import {store} from "../store";
-import {requireAuth} from "../auth";
+import {requireAuth, configureAuthentication} from "@edanniehues/devise-token-auth-redux";
 import {Provider} from "react-redux";
 import "moment/locale/pt-br";
 import App from "../components/App.jsx";
+import {pushError, pushNotice} from '../actions/flashActions';
+
+configureAuthentication({
+    pushError,
+    pushNotice,
+    store
+});
+
 moment.locale('pt-br');
 
 window.react = React;
