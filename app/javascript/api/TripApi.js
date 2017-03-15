@@ -1,4 +1,4 @@
-import {authFetch} from '../auth';
+import {authFetch} from '@edanniehues/devise-token-auth-redux';
 
 export default class TripApi {
     static getAllTrips(date, vehicleId) {
