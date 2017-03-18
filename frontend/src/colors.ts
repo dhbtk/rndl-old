@@ -9,7 +9,7 @@ export function colorForSpeedHsl(speed: number): string {
 
 export function colorForSpeed(speed: number): [number, number, number, number] {
     const hsl: string = colorForSpeedHsl(speed);
-    const rgbArray: number[] = Color(hsl).array();
+    const rgbArray: number[] = (Color(hsl) as any).rgb().array();
     rgbArray.push(1); // opacity
     return rgbArray as [number, number, number, number];
 }

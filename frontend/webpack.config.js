@@ -16,7 +16,7 @@ const config = {
      */
     output: {
         path: path.resolve(__dirname, "../public"),
-        filename: "bundle.js",
+        filename: "bundle[hash].js",
         publicPath: '/'
     },
 
@@ -28,7 +28,7 @@ const config = {
         loaders: [
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader",
+                loader: "babel-loader?presets[]=es2015!ts-loader",
                 exclude: /node_modules/
             },
             {
@@ -38,21 +38,21 @@ const config = {
             },
             {
                 test: /\.scss$/,
-                use: [{
-                    loader: "style-loader" // creates style nodes from JS strings
-                }, {
-                    loader: "css-loader" // translates CSS into CommonJS
-                }, {
-                    loader: "sass-loader" // compiles Sass to CSS
-                }]
+                loader: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: "css-loader!sass-loader",
+                })
             }
         ]
     },
     plugins: [
-        new ExtractTextPlugin('bundle.css'),
+        new ExtractTextPlugin('bundle[hash].css'),
         new HtmlWebpackPlugin({
             template: 'index.html.ejs',
-            inject: 'body'
+            inject: 'body',
+            custom: {
+                cable: process.env.NODE_ENV == 'production' ? "wss://torque.edanni.io/cable/" : "/cable"
+            }
         })
     ],
 
@@ -63,7 +63,8 @@ const config = {
         historyApiFallback: true,
         proxy: {
             "/api": "http://localhost:3000",
-            "/auth": "http://localhost:3000"
+            "/auth": "http://localhost:3000",
+            "/cable": "http://localhost:3000"
         }
     }
 };

@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
   def show
-    render html: '', layout: true
+    render file: Rails.public_path.join('index.html'), layout: false
   end
 end

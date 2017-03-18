@@ -93,7 +93,7 @@ class VehiclePage extends Component<IVehiclePageProps & ConnectedProps, undefine
     }
 
     componentDidUpdate() {
-        if(!this.props.vehicle.id) return;
+        if(!this.props.vehicle) return;
         const coords = getCoordinatesFromEntry(this.props.vehicle.latest_gps_entry);
         this.point = new ol.Feature({
             geometry: new ol.geom.Point(coords)
@@ -173,7 +173,7 @@ ${entry.rpm.toFixed(0)} RPM`
     }
 
     render() {
-        if(!this.props.vehicle.id) {
+        if(!this.props.vehicle) {
             return <span className="loading">Carregando...</span>;
         }
 
