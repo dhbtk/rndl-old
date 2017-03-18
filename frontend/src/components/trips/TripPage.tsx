@@ -49,12 +49,14 @@ class TripPage extends Component<ITripPageProps, undefined> {
         });
 
         let totalLength = 0;
+        const sphere = new ol.Sphere(6378137);
         for (let i = 0; i < this.props.trip.map_points.length - 1; i++) {
+            console.log(i, ' de ', this.props.trip.map_points.length - 1);
             const p1 = this.props.trip.map_points[i];
             const p2 = this.props.trip.map_points[i + 1];
-            const speedAvg = (p1.speed + p2.speed) / 2;
+            const speedAvg = (+p1.speed + p2.speed) / 2;
             const color = colorForSpeed(speedAvg);
-            const lineStringCoords: [number, number][] = [[p1.longitude, p1.latitude], [p2.longitude, p2.latitude]]
+            const lineStringCoords: [number, number][] = [[parseFloat(p1.longitude as any), parseFloat(p1.latitude as any)], [parseFloat(p2.longitude as any), parseFloat(p2.latitude as any)]]
                 .map((coords: [number, number]) => ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857'));
             const feature = new ol.Feature({
                 id: p1.id,
@@ -108,7 +110,6 @@ class TripPage extends Component<ITripPageProps, undefined> {
                 zIndex: 3
             }));
 
-            const sphere = new ol.Sphere(6378137);
             const originalCoords = lineStringCoords.map(coords => ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326'));
             totalLength += sphere.haversineDistance(originalCoords[0], originalCoords[1]);
 
@@ -148,7 +149,7 @@ class TripPage extends Component<ITripPageProps, undefined> {
 
     render() {
         console.log('render');
-        return !this.props.trip.id ? <div>Carregando...</div> : (
+        return !this.props.trip ? <div>Carregando...</div> : (
                 <div className="container-fluid trip-container">
                     <div className="row">
                         <div className="col-md-3">

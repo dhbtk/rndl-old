@@ -56,10 +56,10 @@ class App extends Component<IAppProps, IAppState> {
                     <div className={'navbar-collapse' + (this.state.isOpen ? '' : ' collapse')}>
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
-                                <Link to="/vehicles" className="navbar-link">Veículos</Link>
+                                <Link to="/vehicles" className="nav-link">Veículos</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to="/trips" className="navbar-link">Viagens</Link>
+                                <Link to="/trips" className="nav-link">Viagens</Link>
                             </li>
                         </ul>
                         <span className="navbar-text">{this.props.user.email}</span>

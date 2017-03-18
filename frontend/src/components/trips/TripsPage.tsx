@@ -33,10 +33,10 @@ class TripList extends Component<ITripListProps, undefined> {
                         <td>{moment(trip.duration).hours() > 0 ? moment(trip.duration)
                                 .format('hh [horas,] mm [minutos e] ss [segundos]') : moment(trip.duration)
                                 .format('mm [minutos e] ss [segundos]')}</td>
-                        <td>{(trip.distance / 1000).toFixed(1)} km</td>
-                        <td>{trip.average_speed.toFixed(0)} km/h</td>
-                        <td>{trip.economy.toFixed(1)} km/l</td>
-                        <td>{trip.vehicle.name}</td>
+                        <td>{trip.distance ? ((trip.distance / 1000).toFixed(1) + ' km') : '-'}</td>
+                        <td>{trip.average_speed ? (trip.average_speed.toFixed(0) + ' km/h') : '-'}</td>
+                        <td>{trip.economy ? (trip.economy.toFixed(1) + ' km/l') : ''}</td>
+                        <td>{trip.vehicle ? trip.vehicle.name : '-'}</td>
                     </tr>)}
                     </tbody>
                 </table>

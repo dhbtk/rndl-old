@@ -89,3 +89,7 @@ Session.vim
 tags
 public/assets
 frontend/node_modules
+
+public/index.html
+public/bundle*.js*
+public/bundle*.css*
