@@ -10,8 +10,8 @@ import {loadVehicle} from "../../actions/vehicleActions";
 import Channel = ActionCable.Channel;
 
 function getCoordinatesFromEntry(entry: IEntry): ol.Coordinate {
-    const latitude = entry.latitude;
-    const longitude = entry.longitude;
+    const latitude = parseFloat(entry.latitude as any);
+    const longitude = parseFloat(entry.longitude as any);
     return ol.proj.transform([longitude, latitude], 'EPSG:4326', 'EPSG:3857');
 }
 
@@ -46,7 +46,7 @@ class RealTimeVehicleInformation extends Component<IRealTimeVehicleInformationPr
                 const id: number = (data as any).id;
                 const entry: IEntry = (data as any).entry;
                 if(id == this.props.id && !Number.isNaN(entry.speed)) {
-                    this.setState({ speed: entry.speed, rpm: entry.rpm });
+                    this.setState({ speed: parseFloat(entry.speed as any), rpm: parseFloat(entry.rpm as any) });
                 }
             }
         });
