@@ -3,7 +3,7 @@ import {ITrip, IDate} from "../models";
 
 export default class TripApi {
     static getAllTrips(date: string, vehicleId: number): Promise<IDate[]> {
-        return authFetch(`/api/trips?date=${date}&vehicle_id=${vehicleId}`).then((response: any) => {
+        return authFetch(`/api/trips?date=${date}&vehicle_id=${vehicleId}`).then((response: Response) => {
             return response.json();
         }).catch((error: any) => {
             return error;
@@ -11,7 +11,7 @@ export default class TripApi {
     }
 
     static getTrip(id: number): Promise<ITrip> {
-        return authFetch(`/api/trips/${id}`).then((response: any) => {
+        return authFetch(`/api/trips/${id}`).then((response: Response) => {
             return response.json();
         }).catch((error: any) => {
             return error;

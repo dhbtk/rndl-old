@@ -3,7 +3,7 @@ import {IVehicle} from "../models";
 
 export default class VehicleApi {
     static getAllVehicles(): Promise<IVehicle[]> {
-        return authFetch(`/api/vehicles`).then((response: any) => {
+        return authFetch(`/api/vehicles`).then((response: Response) => {
             return response.json();
         }).catch((error: any) => {
             return error;
@@ -11,7 +11,7 @@ export default class VehicleApi {
     }
 
     static getVehicle(id: number) {
-        return authFetch(`/api/vehicles/${id}`).then((response: any) => {
+        return authFetch(`/api/vehicles/${id}`).then((response: Response) => {
             return response.json();
         }).catch((error: any) => {
             return error;
