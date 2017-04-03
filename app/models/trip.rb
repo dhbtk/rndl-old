@@ -25,7 +25,8 @@ class Trip < ApplicationRecord
   TIME_OFFSET = 0
 
   belongs_to :vehicle
-  has_many :entries, dependent: :restrict_with_error
+  has_many :entries, -> { order(:device_time) }, dependent: :restrict_with_error
+  has_many :map_points, -> { where.not(longitude: nil, latitude: nil).order(:device_time) }, class_name: 'Entry', dependent: :restrict_with_error
 
   def self.find_by_vehicle_within(vehicle, time_ms)
     found_trip = nil
@@ -35,6 +36,12 @@ class Trip < ApplicationRecord
       found_trip = create_with(start_time: session_time).find_or_create_by(vehicle_id: vehicle.id, timestamp_ms: time_ms)
     end
     found_trip
+  end
+
+  def self.by_filters(date, vehicle_id)
+    query = where('date(start_time) = ?', date)
+    query = query.where(vehicle_id: vehicle_id) if vehicle_id.present?
+    query.order(:start_time)
   end
 
   def calculate_distance

@@ -14,6 +14,6 @@ class Vehicle < ApplicationRecord
   has_many :entries, through: :trips
 
   def latest_gps_entry
-    entries.where.not(longitude: nil, latitude: nil).order(device_time: :desc).take
+    entries.unscope(:order).where.not(longitude: nil, latitude: nil).order(device_time: :desc).take
   end
 end
