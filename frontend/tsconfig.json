@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "preserve",
     "module": "commonjs",
     "noImplicitAny": true,
     "outDir": "../build/",
     "preserveConstEnums": true,
     "removeComments": true,
-    "target": "ES5",
+    "target": "ES6",
     "lib": ["dom", "es6"],
     "allowJs": true
   },

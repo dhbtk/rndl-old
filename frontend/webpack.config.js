@@ -1,6 +1,7 @@
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const config = {
     /*
@@ -51,7 +52,7 @@ const config = {
             template: 'index.html.ejs',
             inject: 'body',
             custom: {
-                cable: process.env.NODE_ENV == 'production' ? "wss://torque.edanni.io/cable/" : "/cable"
+                cable: process.env.NODE_ENV === 'production' ? "wss://torque.edanni.io/cable/" : "/cable"
             }
         })
     ],

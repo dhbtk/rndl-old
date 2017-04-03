@@ -49,11 +49,18 @@ class TripPage extends Component<ITripPageProps, undefined> {
         });
 
         let totalLength = 0;
+        let lastSpeed: number = null;
+        const actualPoints = this.props.trip.map_points.filter(point => {
+            if(lastSpeed === 0 && (+point.speed) === 0) {
+                return false;
+            }
+            lastSpeed = +point.speed;
+            return true;
+        });
         const sphere = new ol.Sphere(6378137);
-        for (let i = 0; i < this.props.trip.map_points.length - 1; i++) {
-            console.log(i, ' de ', this.props.trip.map_points.length - 1);
-            const p1 = this.props.trip.map_points[i];
-            const p2 = this.props.trip.map_points[i + 1];
+        for (let i = 0; i < actualPoints.length - 1; i++) {
+            const p1 = actualPoints[i];
+            const p2 = actualPoints[i + 1];
             const speedAvg = (+p1.speed + p2.speed) / 2;
             const color = colorForSpeed(speedAvg);
             const lineStringCoords: [number, number][] = [[parseFloat(p1.longitude as any), parseFloat(p1.latitude as any)], [parseFloat(p2.longitude as any), parseFloat(p2.latitude as any)]]
