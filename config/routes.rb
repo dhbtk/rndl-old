@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :refuelings
   mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks]
   scope '/api' do
     resources :vehicles, except: [:edit]

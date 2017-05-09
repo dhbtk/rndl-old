@@ -1,8 +1,8 @@
-import {vehicles, vehicle} from "./vehicleReducer";
-import {trips, trip} from "./tripReducer";
-import {loading} from "./loadingReducer";
+import {vehicles, vehicle} from "./vehicle";
+import {trips, trip} from "./trip";
+import loading from "./loading";
 import {user, token} from "@edanniehues/devise-token-auth-redux/reducers";
-import {flash} from "./flashReducer";
+import flash from "./flash";
 import {combineReducers, Reducer} from "redux";
 import {IState} from "../models";
 

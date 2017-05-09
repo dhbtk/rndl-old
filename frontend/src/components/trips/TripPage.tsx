@@ -2,7 +2,7 @@ import * as React from "react";
 import * as moment from "moment";
 import * as ol from "openlayers";
 import {connect, Dispatch} from "react-redux";
-import {loadTrip} from "../../actions/tripActions";
+import {loadTrip} from "../../ducks/trip";
 import {ITrip, IState} from "../../models";
 import {colorForSpeedHsl, colorForSpeed} from "../../colors";
 import Component = React.Component;

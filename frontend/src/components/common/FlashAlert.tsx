@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect, Dispatch} from 'react-redux';
-import {popNotice} from '../../actions/flashActions';
+import {popNotice} from '../../ducks/flash';
 import Component = React.Component;
 import {IState, IFlash} from "../../models";
 

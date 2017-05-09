@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  vehicle: one
+  date: 2017-05-09 12:42:00
+  liter_price: 
+  liters: 
+  total_cost: 
+  odometer: 
+
+two:
+  vehicle: two
+  date: 2017-05-09 12:42:00
+  liter_price: 
+  liters: 
+  total_cost: 
+  odometer: 
