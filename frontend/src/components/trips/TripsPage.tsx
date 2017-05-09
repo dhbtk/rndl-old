@@ -3,9 +3,9 @@ import {connect, Dispatch} from "react-redux";
 import * as moment from "moment";
 import {Link, browserHistory} from "react-router";
 import {IDate, ITrip, IVehicle, IState} from "../../models";
-import {loadTrips} from '../../actions/tripActions';
+import {loadTrips} from '../../ducks/trip';
 import Component = React.Component;
-import {loadVehicles} from "../../actions/vehicleActions";
+import {loadVehicles} from "../../ducks/vehicle";
 
 export interface ITripListProps {
     date: IDate

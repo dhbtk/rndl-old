@@ -10,6 +10,15 @@ export interface IVehicle extends IApplicationRecord {
     latest_gps_entry: IEntry
 }
 
+export interface IRefueling extends IApplicationRecord {
+    vehicle_id: number,
+    date: Date,
+    liter_price: number,
+    liters: number,
+    total_cost: number,
+    odometer: number
+}
+
 export interface IEntry extends IApplicationRecord {
     trip_id: number,
     device_time: string,
@@ -56,6 +65,9 @@ export interface IState {
     vehicles: IVehicle[],
     vehicle: IVehicle,
 
+    refuelings: Page<IRefueling>,
+    refueling: IRefueling,
+
     trips: IDate[],
     trip: ITrip,
 
@@ -63,4 +75,11 @@ export interface IState {
 
     token: any,
     user: any
+}
+
+export interface Page<T> {
+    page: number,
+    total_pages: number,
+    total_count: number,
+    content: T[]
 }

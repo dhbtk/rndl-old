@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170405002349) do
+ActiveRecord::Schema.define(version: 20170509154200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,18 @@ ActiveRecord::Schema.define(version: 20170405002349) do
     t.string   "color",                                                          null: false
     t.datetime "created_at",                                                     null: false
     t.datetime "updated_at",                                                     null: false
+  end
+
+  create_table "refuelings", force: :cascade do |t|
+    t.integer  "vehicle_id",                          null: false
+    t.datetime "date",                                null: false
+    t.decimal  "liter_price", precision: 5, scale: 3
+    t.decimal  "liters",      precision: 5, scale: 3
+    t.decimal  "total_cost",  precision: 7, scale: 3
+    t.decimal  "odometer",    precision: 5, scale: 1
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.index ["vehicle_id"], name: "index_refuelings_on_vehicle_id", using: :btree
   end
 
   create_table "trips", id: :bigserial, force: :cascade do |t|
@@ -92,5 +104,6 @@ ActiveRecord::Schema.define(version: 20170405002349) do
   end
 
   add_foreign_key "entries", "trips"
+  add_foreign_key "refuelings", "vehicles"
   add_foreign_key "trips", "vehicles"
 end

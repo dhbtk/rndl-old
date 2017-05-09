@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect, Dispatch} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {loadVehicles} from '../../actions/vehicleActions';
+import {loadVehicles} from '../../ducks/vehicle';
 import {Link} from 'react-router';
 import * as moment from 'moment';
 import {IVehicle, IState} from "../../models";

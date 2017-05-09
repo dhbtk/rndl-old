@@ -13,8 +13,10 @@ import {requireAuth, configureAuthentication} from "@edanniehues/devise-token-au
 import {Provider} from "react-redux";
 import "moment/locale/pt-br";
 import App from "./components/App";
-import {pushError, pushNotice} from './actions/flashActions';
+import {pushError, pushNotice} from './ducks/flash';
 import '../css/application.scss';
+import RealTimePage from "./components/vehicles/vehicle/RealTimePage";
+import RefuelingsPage from './components/vehicles/vehicle/RefuelingsPage';
 
 configureAuthentication({
     pushError,
@@ -37,7 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <Route path="/" component={App}>
                     <IndexRoute component={Home} onEnter={requireAuth}/>
                     <Route path="/vehicles" component={VehiclesPage} onEnter={requireAuth}/>
-                    <Route path="/vehicles/:id" component={VehiclePage} onEnter={requireAuth}/>
+                    <Route path="/vehicles/:id" component={VehiclePage} onEnter={requireAuth}>
+                        <IndexRoute component={RealTimePage}/>
+                        <Route path="/vehicles/:id/refuelings" component={RefuelingsPage} onEnter={requireAuth}/>
+                    </Route>
                     <Route path="/trips" component={TripsPage} onEnter={requireAuth}/>
                     <Route path="/trips/:id" component={TripPage} onEnter={requireAuth}/>
                 </Route>
