@@ -3,9 +3,9 @@ class RefuelingsController < ApplicationController
 
   # GET /refuelings
   def index
-    @refuelings = Refueling.all
+    @refuelings = Refueling.where(vehicle_id: params[:vehicle_id]).order(date: :desc).page(params[:page]).per(50)
 
-    render json: @refuelings
+    render json: Page.new(@refuelings)
   end
 
   # GET /refuelings/1

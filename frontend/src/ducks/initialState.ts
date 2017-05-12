@@ -14,8 +14,11 @@ export default {
         content: []
     },
     refueling: null,
+    newRefueling: null,
 
     flash: null,
+
+    form: {},
 
     token: {},
     user: {}

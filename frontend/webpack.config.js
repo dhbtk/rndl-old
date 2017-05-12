@@ -43,7 +43,17 @@ const config = {
                     fallback: "style-loader",
                     use: "css-loader!sass-loader",
                 })
-            }
+            },
+            {
+                test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                // Limiting the size of the woff fonts breaks font-awesome ONLY for the extract text plugin
+                // loader: "url?limit=10000"
+                use: "url-loader"
+            },
+            {
+                test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+                use: 'file-loader'
+            },
         ]
     },
     plugins: [

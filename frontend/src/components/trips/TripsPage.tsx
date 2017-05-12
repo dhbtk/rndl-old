@@ -66,7 +66,6 @@ class TripsPage extends Component<ITripsPageProps, ITripsPageState> {
 
         const currentMonth = this.props.location.query.date ? moment(this.props.location.query.date, 'YYYY-MM-DD') : moment();
 
-
         this.state = {
             currentMonth: currentMonth,
             vehicleId: this.props.location.query.vehicleId || '',

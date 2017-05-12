@@ -13,10 +13,10 @@ export interface IVehicle extends IApplicationRecord {
 export interface IRefueling extends IApplicationRecord {
     vehicle_id: number,
     date: Date,
-    liter_price: number,
-    liters: number,
-    total_cost: number,
-    odometer: number
+    liter_price: string,
+    liters: string,
+    total_cost: string,
+    odometer: string
 }
 
 export interface IEntry extends IApplicationRecord {
@@ -67,11 +67,14 @@ export interface IState {
 
     refuelings: Page<IRefueling>,
     refueling: IRefueling,
+    newRefueling: IRefueling,
 
     trips: IDate[],
     trip: ITrip,
 
-    flash: IFlash
+    form: any,
+
+    flash: IFlash,
 
     token: any,
     user: any
