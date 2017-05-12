@@ -35,3 +35,4 @@ gem 'annotate'
 gem 'devise_token_auth'
 
 gem "interactor-rails", "~> 2.0"
+gem 'kaminari'
