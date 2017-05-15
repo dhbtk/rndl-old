@@ -1,11 +1,12 @@
 class RefuelingsController < ApplicationController
   before_action :set_refueling, only: [:show, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /refuelings
   def index
-    @refuelings = Refueling.where(vehicle_id: params[:vehicle_id]).order(date: :desc).page(params[:page]).per(50)
+    @refuelings = Refueling.by_vehicle_id(params[:vehicle_id], params[:page])
 
-    render json: Page.new(@refuelings)
+    render json: @refuelings
   end
 
   # GET /refuelings/1
