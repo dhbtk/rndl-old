@@ -18,5 +18,5 @@
 #
 
 class RefuelingSerializer < ActiveModel::Serializer
-  attributes :id, :vehicle_id, :date, :liter_price, :liters, :total_cost, :odometer
+  attributes :id, :vehicle_id, :date, :liter_price, :liters, :total_cost, :odometer, :economy, :km_cost, :tracked_distance
 end
