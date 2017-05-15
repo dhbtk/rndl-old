@@ -1,17 +1,14 @@
 import { connect, Dispatch } from 'react-redux';
-import { IRefueling, IState, IVehicle } from '../../../../models';
+import { IRefueling, IState } from '../../../../models';
 import * as React from 'react';
-import {Form, Control} from 'react-redux-form';
-import { loadVehicles } from '../../../../ducks/vehicle';
+import { Control, Form } from 'react-redux-form';
 import moment = require('moment');
 interface RefuelingsFormProps {
-    dispatch?: Dispatch<IState>,
     vehicleId?: number,
-    refueling?: IRefueling,
     onSubmit?: (data: any) => any
 }
 
-class RefuelingFormBase extends React.Component<RefuelingsFormProps, void> {
+export default class RefuelingFormBase extends React.Component<RefuelingsFormProps, void> {
     onSubmit(data: any) {
         console.log(data);
         console.log(this.formToData(data));
@@ -84,9 +81,9 @@ class RefuelingFormBase extends React.Component<RefuelingsFormProps, void> {
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-2">
+                    <div className="col-sm-2" style={{paddingTop: '28px'}}>
                         <div className="form-group">
-                            <button type="submit" className="btn btn-primary">Enviar</button>
+                            <button type="submit" className="btn btn-primary" style={{width: '100%'}}>Enviar</button>
                         </div>
                     </div>
                 </div>
@@ -94,8 +91,3 @@ class RefuelingFormBase extends React.Component<RefuelingsFormProps, void> {
         );
     }
 }
-
-export const NewRefuelingForm =
-    connect((state, ownProps) => ownProps,
-        (dispatch: Dispatch<IState>): RefuelingsFormProps => ({dispatch})
-    )(RefuelingFormBase) as React.ComponentClass<RefuelingsFormProps>;

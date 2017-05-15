@@ -1,13 +1,13 @@
 export interface IApplicationRecord {
-    id: number,
-    created_at: string,
-    updated_at: string
+    id?: number,
+    created_at?: string,
+    updated_at?: string
 }
 
 export interface IVehicle extends IApplicationRecord {
     name: string,
     torque_id: string
-    latest_gps_entry: IEntry
+    latest_gps_entry?: IEntry
 }
 
 export interface IRefueling extends IApplicationRecord {
@@ -16,7 +16,10 @@ export interface IRefueling extends IApplicationRecord {
     liter_price: string,
     liters: string,
     total_cost: string,
-    odometer: string
+    odometer: string,
+    economy?: string,
+    km_cost?: string,
+    tracked_distance?: string
 }
 
 export interface IEntry extends IApplicationRecord {
@@ -66,8 +69,6 @@ export interface IState {
     vehicle: IVehicle,
 
     refuelings: Page<IRefueling>,
-    refueling: IRefueling,
-    newRefueling: IRefueling,
 
     trips: IDate[],
     trip: ITrip,

@@ -13,8 +13,6 @@ export default {
         total_count: 0,
         content: []
     },
-    refueling: null,
-    newRefueling: null,
 
     flash: null,
 

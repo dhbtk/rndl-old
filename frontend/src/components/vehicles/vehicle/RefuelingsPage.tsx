@@ -2,14 +2,13 @@ import * as React from 'react';
 import { IRefueling, IState, Page } from '../../../models';
 import { connect, Dispatch } from 'react-redux';
 import RefuelingsTable from './refuelings/RefuelingsTable';
-import { NewRefuelingForm } from './refuelings/RefuelingsForm';
+import  NewRefuelingForm from './refuelings/RefuelingsForm';
 import { createRefueling, loadRefuelings } from '../../../ducks/refueling';
+import { ChangeEvent } from 'react';
 
 
 interface RefuelingsPageProps {
     dispatch?: Dispatch<IState>,
-    newRefueling?: IRefueling,
-    refueling?: IRefueling,
     refuelings?: Page<IRefueling>,
     params?: any,
 }
@@ -26,9 +25,13 @@ class RefuelingsPage extends React.Component<RefuelingsPageProps, undefined> {
     render() {
         return (
             <div className="container">
-                <h4>Novo abastecimento</h4>
-                <NewRefuelingForm vehicleId={parseInt(this.props.params.id)} onSubmit={this.createNewRefueling.bind(this)} />
-                <RefuelingsTable/>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <h6>Novo abastecimento</h6>
+                        <NewRefuelingForm vehicleId={parseInt(this.props.params.id)} onSubmit={this.createNewRefueling.bind(this)} />
+                        <RefuelingsTable/>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -36,10 +39,15 @@ class RefuelingsPage extends React.Component<RefuelingsPageProps, undefined> {
 
 export default connect((state: IState): RefuelingsPageProps => {
     return {
-        newRefueling: state.newRefueling,
-        refueling: state.refueling,
         refuelings: state.refuelings
     };
 }, (dispatch: Dispatch<IState>): RefuelingsPageProps => {
     return { dispatch };
 })(RefuelingsPage);
+
+interface DecimalInputProps {
+    onChange?: (event: any) => any,
+    type?: string,
+    initialValue?: number,
+    className?: string
+}
