@@ -27,7 +27,7 @@ class RefuelingsTable extends React.Component<Page<IRefueling> & {dispatch: Disp
                     <th>Economia</th>
                     <th>Custo/km</th>
                     <th>Distância rastreada</th>
-                    <th>Opções</th>
+                    <th style={{textAlign: 'center'}}>Opções</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -38,11 +38,14 @@ class RefuelingsTable extends React.Component<Page<IRefueling> & {dispatch: Disp
                         <td>{numberStringToLocale(refueling.liters, 1)} L</td>
                         <td>R$ {numberStringToLocale(refueling.total_cost)}</td>
                         <td>{numberStringToLocale(refueling.odometer, 1)} km</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
+                        <td>{numberStringToLocale(refueling.economy, 1)} km/l</td>
+                        <td>R$ {numberStringToLocale(refueling.km_cost, 2)}</td>
                         <td>
-                            <a href="#" className="btn" onClick={this.handleRemove.bind(this, refueling)}><i className="fa fa-fw fa-remove"/></a>
+                            {numberStringToLocale(refueling.tracked_distance, 2)} km
+                            ({((parseFloat(refueling.tracked_distance)/parseFloat(refueling.odometer))*100).toFixed(0)}%)
+                        </td>
+                        <td style={{textAlign: 'center'}}>
+                            <a href="#" onClick={this.handleRemove.bind(this, refueling)}><i className="fa fa-fw fa-remove"/></a>
                         </td>
                     </tr>)}
                 </tbody>

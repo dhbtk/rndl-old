@@ -1,11 +1,11 @@
-import {vehicles, vehicle} from "./vehicle";
-import {trips, trip} from "./trip";
-import loading from "./loading";
-import {user, token} from "@edanniehues/devise-token-auth-redux/reducers";
-import flash from "./flash";
-import {combineReducers, Reducer} from "redux";
-import {IState} from "../models";
-import { newRefueling, refueling, refuelings } from './refueling';
+import { vehicle, vehicles } from './vehicle';
+import { trip, trips } from './trip';
+import loading from './loading';
+import { token, user } from '@edanniehues/devise-token-auth-redux/reducers';
+import flash from './flash';
+import { combineReducers, Reducer } from 'redux';
+import { IState } from '../models';
+import { refuelings } from './refueling';
 import { combineForms } from 'react-redux-form';
 import moment = require('moment');
 
@@ -19,8 +19,6 @@ const reducers = {
     trip,
 
     refuelings,
-    refueling,
-    newRefueling,
 
     token,
     user,
@@ -41,6 +39,11 @@ const reducers = {
             liters: '',
             odometer: '',
             total_cost: ''
+        },
+        vehicle: {
+            id: '',
+            name: '',
+            torque_id: ''
         }
     }, 'form')
 };
