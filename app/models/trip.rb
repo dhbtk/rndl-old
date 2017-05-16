@@ -25,7 +25,7 @@ class Trip < ApplicationRecord
   TIME_OFFSET = 0
 
   belongs_to :vehicle
-  has_many :entries, -> { order(:device_time) }, dependent: :restrict_with_error
+  has_many :entries, -> { order(:device_time) }, dependent: :delete_all
   has_many :map_points, -> { where.not(longitude: nil, latitude: nil).order(:device_time) }, class_name: 'Entry', dependent: :restrict_with_error
 
   def self.find_by_vehicle_within(vehicle, time_ms)
