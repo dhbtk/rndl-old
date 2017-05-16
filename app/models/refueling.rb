@@ -25,25 +25,25 @@ class Refueling < ApplicationRecord
   def self.by_vehicle_id(vehicle_id, page = 1, per = 50)
     count = where(vehicle_id: vehicle_id).count
     offset = (page.to_i - 1)*per
-    results = find_by_sql([<<EOF, vehicle_id, per, offset])
-select current.*,
+    results = find_by_sql([<<EOF.squish, vehicle_id, per, offset])
+SELECT current.*,
 round(coalesce(next.odometer/current.liters, 0), 2) as economy,
 round(coalesce(current.total_cost/next.odometer, 0), 2) as km_cost,
 coalesce(round((select sum(distance)
-from trips
-where vehicle_id = current.vehicle_id and 
-	date(start_time) >= date(current.date) and 
+FROM trips
+WHERE vehicle_id = current.vehicle_id AND 
+	date(start_time) >= date(current.date) AND 
 	date(start_time) < next.date
 )::numeric/1000, 2), 0) as tracked_distance
-from refuelings current
-left join refuelings next on 
+FROM refuelings current
+LEFT JOIN refuelings next ON 
 	next.id = (
-		select r.id from refuelings r
-		where r.vehicle_id = current.vehicle_id and r.date > current.date
-		order by r.date limit 1)
-where current.vehicle_id = ?
-order by current.date desc
-limit ? offset ?
+		SELECT r.id FROM refuelings r
+		WHERE r.vehicle_id = current.vehicle_id AND r.date > current.date
+		ORDER BY r.date LIMIT 1)
+WHERE current.vehicle_id = ?
+ORDER BY current.date DESC
+LIMIT ? OFFSET ?
 EOF
     Page.new(results, (count.to_f / per).ceil, count, page)
   end

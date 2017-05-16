@@ -2,8 +2,13 @@ class TripsController < ApplicationController
   before_action :authenticate_user!
   def index
     date = Date.parse(params[:date])
-    @dates = Trip.where('date(start_time) >= ? AND date(start_time) <= ?', date.beginning_of_month, date.end_of_month).group('date(start_time)').order('date(start_time) desc').count.to_a
-    render json: @dates.map{|d| {trip_date: d[0], count: d[1], trips: Trip.by_filters(d[0], params[:vehicle_id]).map{|t| TripListSerializer.new(t)}}}
+    @dates = Trip
+                 .select('trips.*, date(start_time) as start_date').includes(:vehicle)
+                 .where('date(start_time) BETWEEN :start AND :end', start: date.beginning_of_month, end: date.end_of_month)
+                 .order('date(start_time) DESC, start_time ASC')
+    @dates = @dates.where(vehicle_id: params[:vehicle_id]) if params[:vehicle_id].present?
+    @dates = @dates.to_a.group_by{|d| d.start_date}.map{|k,v| {trip_date: k, count: v.count, trips: v.map{|t| TripListSerializer.new(t)}}}
+    render json: @dates
   end
 
   def show
