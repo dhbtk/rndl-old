@@ -95,6 +95,21 @@ export function createVehicle(vehicle: IVehicle): ThunkAction<Promise<void>, Dis
     };
 }
 
+export function destroyVehicle(vehicle: IVehicle): ThunkAction<Promise<void>, Dispatch<IState>, void> {
+    return (dispatch: Dispatch<IState>) => {
+        dispatch(startLoading());
+        return authFetch(`/api/vehicles/${vehicle.id}`, { method: 'DELETE' }).then((response: Response) => {
+            dispatch(stopLoading());
+            if (response.ok) {
+                dispatch(pushNotice('Veículo excluído.'));
+                dispatch(loadVehicles());
+            } else {
+                dispatch(pushError('Não foi possível excluir o veículo.'));
+            }
+        }, (error: any) => dispatch(stopLoading()));
+    }
+}
+
 function getAllVehicles(): Promise<IVehicle[]> {
     return authFetch(`/api/vehicles`).then((response: Response) => {
         return response.json();

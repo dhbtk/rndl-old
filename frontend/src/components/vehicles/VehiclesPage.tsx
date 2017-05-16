@@ -1,20 +1,31 @@
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
-import { loadVehicles } from '../../ducks/vehicle';
+import { destroyVehicle, loadVehicles } from '../../ducks/vehicle';
 import { Link } from 'react-router';
 import * as moment from 'moment';
 import { IState, IVehicle } from '../../models';
 import Component = React.Component;
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { browserHistory } from 'react-router';
 
-class Vehicle extends React.Component<{vehicle: IVehicle}, {open: boolean}> {
+class Vehicle extends React.Component<{vehicle: IVehicle, onDelete: (vehicle: IVehicle) => void}, {dropdownOpen?: boolean}> {
     constructor(props: any) {
         super(props);
-        this.state = { open: false };
+        this.state = {
+            dropdownOpen: false
+        };
+    }
+
+    onDelete(event: React.MouseEvent<any>) {
+        this.props.onDelete(this.props.vehicle);
     }
 
     toggle() {
-        this.setState({ open: !this.state.open });
+        this.setState({ dropdownOpen: !this.state.dropdownOpen });
+    }
+
+    goToEdit() {
+        browserHistory.push(`/vehicles/${this.props.vehicle.id}/edit`)
     }
 
     render() {
@@ -25,13 +36,13 @@ class Vehicle extends React.Component<{vehicle: IVehicle}, {open: boolean}> {
                     <div className="card-block">
                         <h4 className="card-title d-flex">
                             {vehicle.name}
-                            <Dropdown className="ml-auto" isOpen={this.state.open} toggle={this.toggle.bind(this)}>
+                            <Dropdown className="ml-auto" isOpen={this.state.dropdownOpen} toggle={this.toggle.bind(this)}>
                                 <DropdownToggle color="primary">
                                     <i className="fa fa-fw fa-ellipsis-v" />
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    <DropdownItem>Editar</DropdownItem>
-                                    <DropdownItem>Excluir</DropdownItem>
+                                    <DropdownItem onClick={this.goToEdit.bind(this)}>Editar</DropdownItem>
+                                    <DropdownItem onClick={this.onDelete.bind(this)}>Excluir</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                         </h4>
@@ -51,9 +62,34 @@ export interface IVehiclesPageProps {
     dispatch: Dispatch<IState>
 }
 
-class VehiclesPage extends Component<IVehiclesPageProps, undefined> {
+class VehiclesPage extends Component<IVehiclesPageProps, {modalOpen?: boolean, vehicle?: IVehicle}> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            modalOpen: false,
+            vehicle: null
+        };
+    }
+
     componentDidMount() {
         this.props.dispatch(loadVehicles());
+    }
+
+    onDelete(vehicle: IVehicle) {
+        this.setState({
+            vehicle,
+            modalOpen: true
+        });
+    }
+
+    toggleModal() {
+        this.setState({ modalOpen: !this.state.modalOpen });
+    }
+
+    dispatchDelete() {
+        this.setState({ modalOpen: false });
+        this.props.dispatch(destroyVehicle(this.state.vehicle) as any);
+
     }
 
     render() {
@@ -68,8 +104,19 @@ class VehiclesPage extends Component<IVehiclesPageProps, undefined> {
                     </div>
                 </div>
                 <div className="row">
-                    {this.props.vehicles.map((vehicle: IVehicle) => <Vehicle key={vehicle.id} vehicle={vehicle} />)}
+                    {this.props.vehicles.map((vehicle: IVehicle) => <Vehicle key={vehicle.id} vehicle={vehicle} onDelete={this.onDelete.bind(this)} />)}
                 </div>
+                <Modal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this)}>
+                <ModalHeader toggle={this.toggleModal.bind(this)}>Excluir veículo</ModalHeader>
+                <ModalBody>
+                    Realmente excluir o <strong>{this.state.vehicle && this.state.vehicle.name}? </strong>
+                    Todas as viagens e abastecimentos associados serão perdidos.
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="danger" onClick={this.dispatchDelete.bind(this)}>Excluir</Button>{' '}
+                    <Button color="secondary" onClick={this.toggleModal.bind(this)}>Cancelar</Button>
+                </ModalFooter>
+            </Modal>
             </div>
         );
     }
