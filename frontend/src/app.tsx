@@ -18,6 +18,7 @@ import '../css/application.scss';
 import RealTimePage from './components/vehicles/vehicle/RealTimePage';
 import RefuelingsPage from './components/vehicles/vehicle/RefuelingsPage';
 import NewVehiclePage from './components/vehicles/NewVehiclePage';
+import EditVehiclePage from './components/vehicles/EditVehiclePage';
 
 configureAuthentication({
     pushError,
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <IndexRoute component={Home} onEnter={requireAuth}/>
                     <Route path="/vehicles" component={VehiclesPage} onEnter={requireAuth}/>
                     <Route path="/vehicles/new" component={NewVehiclePage} onEnter={requireAuth}/>
+                    <Route path="/vehicles/:id/edit" component={EditVehiclePage} onEnter={requireAuth}/>
                     <Route path="/vehicles/:id" component={VehiclePage} onEnter={requireAuth}>
                         <IndexRoute component={RealTimePage}/>
                         <Route path="/vehicles/:id/refuelings" component={RefuelingsPage} onEnter={requireAuth}/>

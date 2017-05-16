@@ -19,10 +19,6 @@ export default class VehicleForm extends React.Component<VehicleFormProps, void>
         };
     }
 
-    static dataToForm(vehicle: IVehicle): any {
-
-    }
-
     render() {
         return (
             <Form model="form.vehicle" onSubmit={this.onSubmit.bind(this)}>
