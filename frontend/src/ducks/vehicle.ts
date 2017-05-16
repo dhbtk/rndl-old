@@ -8,13 +8,17 @@ import { authFetch } from '@edanniehues/devise-token-auth-redux';
 import { pushError, pushNotice } from './flash';
 import { actions as formActions } from 'react-redux-form';
 
+const LOAD_VEHICLES_START: string = 'LOAD_VEHICLES_START';
 const LOAD_VEHICLES_SUCCESS: string = 'LOAD_VEHICLES_SUCCESS';
 const LOAD_VEHICLE_SUCCESS: string = 'LOAD_VEHICLE_SUCCESS';
+const LOAD_VEHICLE_START: string = 'LOAD_VEHICLE_START';
 
 export function vehicles(state: IVehicle[] = initialState.vehicles, action: IAction<IVehicle[]>): IVehicle[] {
     switch (action.type) {
         case LOAD_VEHICLES_SUCCESS:
             return action.payload;
+        case LOAD_VEHICLES_START:
+            return [];
         default:
             return state;
     }
@@ -24,6 +28,8 @@ export function vehicle(state: IVehicle = initialState.vehicle, action: IAction<
     switch (action.type) {
         case LOAD_VEHICLE_SUCCESS:
             return action.payload;
+        case LOAD_VEHICLE_START:
+            return null;
         default:
             return state;
     }
@@ -32,6 +38,7 @@ export function vehicle(state: IVehicle = initialState.vehicle, action: IAction<
 export function loadVehicles(): ThunkAction<Promise<void>, IState, void> {
     return (dispatch: Dispatch<IState>) => {
         dispatch(startLoading());
+        dispatch(loadVehiclesStart());
         return getAllVehicles().then((vehicles: IVehicle[]) => {
             dispatch(stopLoading());
             dispatch(loadVehiclesSuccess(vehicles));
@@ -46,9 +53,14 @@ export function loadVehiclesSuccess(vehicles: IVehicle[]): IAction<IVehicle[]> {
     return { type: LOAD_VEHICLES_SUCCESS, payload: vehicles };
 }
 
+export function loadVehiclesStart() {
+    return { type: LOAD_VEHICLES_START };
+}
+
 export function loadVehicle(id: number): ThunkAction<Promise<void>, IState, void> {
     return (dispatch: Dispatch<IState>) => {
         dispatch(startLoading());
+        dispatch(loadVehicleStart());
         return getVehicle(id).then((vehicle: IVehicle) => {
             dispatch(stopLoading());
             dispatch(formActions.load('form.vehicle', {
@@ -66,6 +78,10 @@ export function loadVehicle(id: number): ThunkAction<Promise<void>, IState, void
 
 export function loadVehicleSuccess(vehicle: IVehicle): IAction<IVehicle> {
     return { type: LOAD_VEHICLE_SUCCESS, payload: vehicle };
+}
+
+export function loadVehicleStart() {
+    return { type: LOAD_VEHICLE_START };
 }
 
 export function createVehicle(vehicle: IVehicle): ThunkAction<Promise<void>, Dispatch<IState>, void> {
@@ -105,6 +121,27 @@ export function destroyVehicle(vehicle: IVehicle): ThunkAction<Promise<void>, Di
                 dispatch(loadVehicles());
             } else {
                 dispatch(pushError('Não foi possível excluir o veículo.'));
+            }
+        }, (error: any) => dispatch(stopLoading()));
+    }
+}
+
+export function updateVehicle(vehicle: IVehicle): ThunkAction<Promise<void>, Dispatch<IState>, void> {
+    return (dispatch: Dispatch<IState>) => {
+        dispatch(startLoading());
+        return authFetch(`/api/vehicles/${vehicle.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({vehicle})
+        }).then((response: Response) => {
+            dispatch(stopLoading());
+            if(response.ok) {
+                dispatch(pushNotice('Veículo atualizado.'));
+                return response.json().then((vehicle: IVehicle) => dispatch(loadVehicleSuccess(vehicle)));
+            } else {
+                dispatch(pushError('Não foi possível atualizar o veículo.'));
             }
         }, (error: any) => dispatch(stopLoading()));
     }
