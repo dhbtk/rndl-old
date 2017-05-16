@@ -41,11 +41,11 @@ class Trip < ApplicationRecord
   def self.by_filters(date, vehicle_id)
     query = where('date(start_time) = ?', date)
     query = query.where(vehicle_id: vehicle_id) if vehicle_id.present?
-    query.order(:start_time)
+    query.includes(:vehicle).order(:start_time)
   end
 
   def calculate_distance
-    Trip.select(<<-EOF).take&.calculated_distance
+    Trip.select(<<-EOF.squish).take&.calculated_distance
 (
   SELECT
     st_length(st_makeline(point)::geography)
@@ -59,7 +59,7 @@ class Trip < ApplicationRecord
 
   def self.update_calculated_info(id)
     transaction do
-      connection.execute <<-EOF
+      connection.execute <<-EOF.squish
 UPDATE trips SET
 economy = (SELECT avg(instant_kml) FROM entries WHERE trip_id = trips.id AND rpm > 0),
 average_speed = (SELECT avg(speed) FROM entries WHERE trip_id = trips.id),
@@ -77,7 +77,7 @@ duration = (SELECT max(device_time) FROM entries WHERE trip_id = trips.id) - sta
 updated_at = now()
 WHERE id = '#{id}'
       EOF
-      connection.execute <<-EOF
+      connection.execute <<-EOF.squish
 UPDATE trips SET
 economy = ((distance)/1000)/fuel_used
 WHERE id = '#{id}'
