@@ -1,5 +1,5 @@
 class UploadTorqueEntry
   include Interactor::Organizer
 
-  organize InsertEntry, SendRealTimeVehiclePosition, UpdateTrip
+  organize InsertEntry, SendRealTimeVehiclePosition
 end
