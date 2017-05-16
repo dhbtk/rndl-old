@@ -57,11 +57,11 @@ class Trip < ApplicationRecord
     EOF
   end
 
-  def self.update_calculated_info(id)
+  def self.update_calculated_info
     transaction do
       connection.execute <<-EOF.squish
 UPDATE trips SET
-economy = (SELECT avg(instant_kml) FROM entries WHERE trip_id = trips.id AND rpm > 0),
+economy = (SELECT kml FROM entries WHERE trip_id = trips.id AND rpm > 0 ORDER BY device_time DESC LIMIT 1),
 average_speed = (SELECT avg(speed) FROM entries WHERE trip_id = trips.id),
 max_speed = (SELECT max(speed) FROM entries WHERE trip_id = trips.id),
 fuel_used = (SELECT max(fuel_used) FROM entries WHERE trip_id = trips.id),
@@ -75,13 +75,10 @@ distance = (
 ),
 duration = (SELECT max(device_time) FROM entries WHERE trip_id = trips.id) - start_time,
 updated_at = now()
-WHERE id = '#{id}'
+WHERE id IN (
+SELECT id FROM trips WHERE (SELECT MAX(updated_at) FROM entries WHERE trip_id = trips.id) > updated_at
+)
       EOF
-      connection.execute <<-EOF.squish
-UPDATE trips SET
-economy = ((distance)/1000)/fuel_used
-WHERE id = '#{id}'
-EOF
     end
   end
 end
