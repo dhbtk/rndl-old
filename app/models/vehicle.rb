@@ -10,7 +10,8 @@
 #
 
 class Vehicle < ApplicationRecord
-  has_many :trips
+  has_many :trips, dependent: :destroy
+  has_many :refuelings, dependent: :delete_all
   has_many :entries, through: :trips
 
   def latest_gps_entry
