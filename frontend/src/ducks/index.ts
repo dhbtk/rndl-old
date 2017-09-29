@@ -43,7 +43,9 @@ const reducers = {
         vehicle: {
             id: '',
             name: '',
-            torque_id: ''
+            torque_id: '',
+            final_drive: '1.00',
+            gear_ratios: {}
         }
     }, 'form')
 };

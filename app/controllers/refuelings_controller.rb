@@ -1,6 +1,6 @@
 class RefuelingsController < ApplicationController
   before_action :set_refueling, only: [:show, :update, :destroy]
-  before_action :authenticate_user!
+  before_action :authenticate_user
 
   # GET /refuelings
   def index

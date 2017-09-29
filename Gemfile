@@ -8,6 +8,7 @@ end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
+gem 'bcrypt'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 gem 'activerecord-postgis-adapter', '~> 4.0.0'
@@ -32,7 +33,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'annotate'
 
-gem 'devise_token_auth'
+gem 'knock'
 
 gem "interactor-rails", "~> 2.0"
 gem 'kaminari'

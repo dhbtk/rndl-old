@@ -1,5 +1,5 @@
 class VehiclesController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user
   before_action :set_vehicle, only: [:show, :update, :destroy]
   def index
     render json: Vehicle.order(:name)
@@ -38,6 +38,6 @@ class VehiclesController < ApplicationController
   end
 
   def vehicle_params
-    params.require(:vehicle).permit(:name, :torque_id)
+    params.require(:vehicle).permit(:name, :torque_id, :final_drive, :tire_diameter, gear_ratios: [])
   end
 end
