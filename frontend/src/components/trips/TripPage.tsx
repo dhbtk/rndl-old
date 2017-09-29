@@ -3,7 +3,7 @@ import * as moment from "moment";
 import * as ol from "openlayers";
 import {connect, Dispatch} from "react-redux";
 import {loadTrip} from "../../ducks/trip";
-import {ITrip, IState} from "../../models";
+import { ITrip, IState, IEntry } from '../../models';
 import {colorForSpeedHsl, colorForSpeed} from "../../colors";
 import Component = React.Component;
 
@@ -14,32 +14,39 @@ export interface ITripPageProps {
 }
 
 class TripPage extends Component<ITripPageProps, undefined> {
-    componentDidUpdate() {
-        console.log('componentDidUpdate');
-        // here we render the map
-        const points = new ol.Collection<ol.Feature>();
-        const segments = new ol.Collection<ol.Feature>();
+    private map: ol.Map;
+    private points: ol.Collection<ol.Feature> = new ol.Collection<ol.Feature>();
+    private pointsLayer: ol.layer.Vector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: this.segments
+        })
+    });
+    private segments: ol.Collection<ol.Feature> = new ol.Collection<ol.Feature>();
+    private segmentsLayer: ol.layer.Vector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            features: this.segments
+        })
+    });
 
-        const segmentsLayer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: segments
-            })
-        });
+    componentWillMount() {
+        this.props.dispatch(loadTrip(this.props.params.id));
+        document.querySelector('html').classList.add('full-height');
+    }
 
-        // creating map
-        const map = new ol.Map({
+    componentWillUnmount() {
+        document.querySelector('html').classList.remove('full-height');
+    }
+    
+    componentDidMount() {
+        this.map = new ol.Map({
             controls: [],
             interactions: ol.interaction.defaults({doubleClickZoom: false}),
             layers: [
                 new ol.layer.Tile({
                     source: new ol.source.OSM()
                 }),
-                segmentsLayer,
-                new ol.layer.Vector({
-                    source: new ol.source.Vector({
-                        features: points
-                    })
-                })
+                this.segmentsLayer,
+                this.pointsLayer
             ],
             target: 'trip-map',
             view: new ol.View({
@@ -47,10 +54,18 @@ class TripPage extends Component<ITripPageProps, undefined> {
                 zoom: 14
             })
         });
-
+    }
+    
+    componentWillReceiveProps(newProps: ITripPageProps) {
+        if(newProps.trip && newProps.trip != this.props.trip) {
+            this.renderPoints(newProps.trip.map_points);
+        }
+    }
+    
+    renderPoints(mapPoints: IEntry[]) {
         let totalLength = 0;
         let lastSpeed: number = null;
-        const actualPoints = this.props.trip.map_points.filter(point => {
+        const actualPoints = mapPoints.filter(point => {
             if(lastSpeed === 0 && (+point.speed) === 0) {
                 return false;
             }
@@ -68,6 +83,7 @@ class TripPage extends Component<ITripPageProps, undefined> {
             const feature = new ol.Feature({
                 id: p1.id,
                 speed: speedAvg,
+                gear: actualPoints[i].gear,
                 geometry: new ol.geom.LineString(lineStringCoords)
             });
             feature.setStyle([new ol.style.Style({
@@ -89,11 +105,12 @@ class TripPage extends Component<ITripPageProps, undefined> {
                     zIndex: 2
                 })
             ]);
-            segments.push(feature);
+            this.segments.push(feature);
 
             const point = new ol.Feature({
                 id: p1.id,
                 speed: speedAvg,
+                gear: actualPoints[i].gear,
                 geometry: new ol.geom.Point(lineStringCoords[0])
             });
             const dx = lineStringCoords[1][0] - lineStringCoords[0][0];
@@ -121,7 +138,7 @@ class TripPage extends Component<ITripPageProps, undefined> {
             totalLength += sphere.haversineDistance(originalCoords[0], originalCoords[1]);
 
             if (totalLength > 100) {
-                points.push(point);
+                this.points.push(point);
                 totalLength = 0;
             }
         }
@@ -132,46 +149,42 @@ class TripPage extends Component<ITripPageProps, undefined> {
             positioning: 'bottom-left'
         });
 
-        map.addOverlay(tooltip);
-        map.on('pointermove', (evt: ol.MapBrowserPointerEvent) => {
+        this.map.addOverlay(tooltip);
+        this.map.on('pointermove', (evt: ol.MapBrowserPointerEvent) => {
             const pixel = evt.pixel;
-            const feature = map.forEachFeatureAtPixel(pixel, feature => feature);
+            const feature = this.map.forEachFeatureAtPixel(pixel, feature => feature);
             document.getElementById('trip-tooltip').style.display = feature ? '' : 'none';
             if (feature) {
                 tooltip.setPosition(evt.coordinate);
-                document.getElementById('trip-tooltip').innerHTML = feature.get('speed').toFixed(0) + ' km/h';
+                document.getElementById('trip-tooltip').innerHTML = feature.get('speed').toFixed(0) + ' km/h<br>Marcha: ' + feature.get('gear');
             }
         });
-        map.getView().fit(segmentsLayer.getSource().getExtent(), map.getSize());
-    }
-
-    componentWillMount() {
-        this.props.dispatch(loadTrip(this.props.params.id));
-        document.querySelector('html').classList.add('full-height');
-    }
-
-    componentWillUnmount() {
-        document.querySelector('html').classList.remove('full-height');
+        this.map.getView().fit(this.segmentsLayer.getSource().getExtent(), this.map.getSize());
     }
 
     render() {
         console.log('render');
-        return !this.props.trip ? <div>Carregando...</div> : (
+        return (
                 <div className="container-fluid trip-container">
                     <div className="row">
-                        <div className="col-md-3">
-                            <h5>Viagem de {moment(this.props.trip.start_time).format('DD [de] MMMM, HH:mm')}</h5>
-                            <p>Distância: {(this.props.trip.distance / 1000).toFixed(2)} km</p>
-                            <p>Média de consumo: {this.props.trip.economy.toFixed(1)} km/l</p>
-                            <p>Velocidade média: {this.props.trip.average_speed.toFixed(0)} km/h</p>
-                            <p>Velocidade máxima: {this.props.trip.max_speed.toFixed(0)} km/h</p>
-                        </div>
+                        {this.props.trip ?
+                            <div className="col-md-3">
+                                <h5>Viagem de {moment(this.props.trip.start_time).format('DD [de] MMMM, HH:mm')}</h5>
+                                <p>Distância: {(this.props.trip.distance / 1000).toFixed(2)} km</p>
+                                <p>Média de consumo: {this.props.trip.economy.toFixed(1)} km/l</p>
+                                <p>Velocidade média: {this.props.trip.average_speed.toFixed(0)} km/h</p>
+                                <p>Velocidade máxima: {this.props.trip.max_speed.toFixed(0)} km/h</p>
+                            </div> :
+                            <div className="col-md-3">
+                                <h5>Viagem</h5>
+                                <p>Carregando...</p>
+                            </div>}
                         <div className="col-md-9" id="trip-map">
                             <div id="trip-tooltip" className="trip-tooltip"/>
                             <div id="trip-legend">
                                 <ul>
                                     {([120, 80, 60, 40, 0]).map(speed => <li key={speed}>
-                                        <div className="legend-color" style={{background: colorForSpeedHsl(speed)}}></div>
+                                        <div className="legend-color" style={{background: colorForSpeedHsl(speed)}} />
                                         <span>{speed} km/h</span>
                                     </li>)}
                                 </ul>

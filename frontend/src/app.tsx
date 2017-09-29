@@ -32,6 +32,7 @@ let myWindow = window as any;
 myWindow.react = React;
 myWindow.React = React;
 myWindow.moment = moment;
+myWindow.store = store;
 
 document.addEventListener('DOMContentLoaded', () => {
     ReactDOM.render(

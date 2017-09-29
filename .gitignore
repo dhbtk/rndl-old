@@ -93,3 +93,6 @@ frontend/node_modules
 public/index.html
 public/bundle*.js*
 public/bundle*.css*
+
+.idea
+*.iml

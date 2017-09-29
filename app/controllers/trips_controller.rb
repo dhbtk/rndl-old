@@ -12,7 +12,7 @@ class TripsController < ApplicationController
   end
 
   def show
-    @trip = Trip.find(params[:id])
+    @trip = Trip.includes(:entries, :vehicle).find(params[:id])
     render json: @trip
   end
 end

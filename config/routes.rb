@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount_devise_token_auth_for 'User', at: 'auth', skip: [:omniauth_callbacks]
+  post 'user_token' => 'user_token#create'
   scope '/api' do
     resources :vehicles, except: [:edit]
     resources :trips, only: [:index, :show, :destroy]

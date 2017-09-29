@@ -66,7 +66,10 @@ export function loadVehicle(id: number): ThunkAction<Promise<void>, IState, void
             dispatch(formActions.load('form.vehicle', {
                 id: vehicle.id,
                 name: vehicle.name,
-                torque_id: vehicle.torque_id
+                torque_id: vehicle.torque_id,
+                final_drive: vehicle.final_drive,
+                gear_ratios: vehicle.gear_ratios,
+                tire_diameter: vehicle.tire_diameter
             }));
             dispatch(loadVehicleSuccess(vehicle));
         }).catch((error: any) => {

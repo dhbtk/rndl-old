@@ -7,7 +7,10 @@ export interface IApplicationRecord {
 export interface IVehicle extends IApplicationRecord {
     name: string,
     torque_id: string
-    latest_gps_entry?: IEntry
+    latest_gps_entry?: IEntry,
+    final_drive: number,
+    tire_diameter: number,
+    gear_ratios: number[]
 }
 
 export interface IRefueling extends IApplicationRecord {
@@ -35,7 +38,8 @@ export interface IEntry extends IApplicationRecord {
     fuel_flow: number,
     fuel_used: number,
     throttle_percent: number,
-    instant_kml: number
+    instant_kml: number,
+    gear: number
 }
 
 export interface ITrip extends IApplicationRecord {
